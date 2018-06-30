@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "mocha": "^5.2.0",
     "npm": "^6.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -11,8 +12,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test": "mocha"
   },
   "devDependencies": {
     "enzyme": "^3.3.0",
