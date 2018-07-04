@@ -1,6 +1,6 @@
-const expect = require("chai").expect;
-const handChecker = require("../../src/utils/handChecker");
-const hands = require("../../src/utils/mockHands");
+const expect = require('chai').expect;
+const handChecker = require('../../src/utils/handChecker');
+const hands = require('../../src/utils/mockHands');
 
 describe("****************** FUNCTION handChecker ******************", () => {
     const initialHand = {
@@ -20,7 +20,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.royalFlush;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -66,7 +66,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.straightFlush;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -161,7 +161,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.fourKind;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -207,7 +207,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.fullHouse;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -253,7 +253,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.flush;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -299,7 +299,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.straight;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -388,7 +388,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.threeKind;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -434,7 +434,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.twoPair;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -480,7 +480,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.pair;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });
@@ -526,7 +526,7 @@ describe("****************** FUNCTION handChecker ******************", () => {
         const testHand = Object.assign({}, initialHand);
         testHand.cards = hands.highCard;
         it("should not edit the value of the original hand", () => {
-            const originalHand = { ...testHand };
+            const originalHand = Object.assign({}, testHand);
             handChecker.determineHand(testHand);
             expect(originalHand).to.deep.equal(testHand);
         });

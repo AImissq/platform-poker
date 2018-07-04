@@ -1,295 +1,77 @@
-const initialHand = {
-    cards: [
-        { value: 2, suit: "clubs" },
-        { value: 10, suit: "hearts" },
-        { value: 12, suit: "hearts" },
-        { value: 4, suit: "diamonds" },
-        { value: 4, suit: "hearts" },
-        { value: 6, suit: "hearts" },
-        { value: 8, suit: "spades" }
-    ], // The player's 7 card pool to make a hand from, including 2 hole cards & 5 table cards
-    suit: "null", // If at least 5 cards share the same suit, that suit will be marked here as a string value
-    sort: "none", // 'none', 'valueSort', or 'suitSort' to reflect what order this.cards are currently in
-    handTitle: "High Card", // String syntax for a hand's title
-    handRank: 1, // This is the card rank. 1 is a High Card; 10 is a Royal Flush.
-    cardOrder: [], // This is the resulting 5 card hand
-    // To check win condition, the player with the highest handRank wins.
-    // Tiebreakers are with cardOrder[0].value, then c[1].value, then c[2].value, etc. If no winner after cardOrder.length, it's a tie.
-    pairCards: [], // If there is a pair, the system will log a copy of cardOrder so it will not be overwritten by future checks.
-    numPairs: 0, // Stores the number of pairs found
-    straight: false,
-    straightCards: []
-};
+// import { addAces, removeAces } from './aceManipulation.js';
+// import { valueSort, suitSort } from './cardSorter.js';
+// import * as hands from './mockHands.js';
 
-/* *****************************************************************************************
-
-**
-
-** BEGIN IMPORTED CODE
-
-**
-
-**************************************************************************************** */
-
-const highCard = [
-    { value: 2, suit: "clubs" },
-    { value: 10, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 3, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const pair = [
-    { value: 2, suit: "clubs" },
-    { value: 12, suit: "hearts" },
-    { value: 13, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const twoPair = [
-    { value: 2, suit: "clubs" },
-    { value: 12, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const threeKind = [
-    { value: 4, suit: "clubs" },
-    { value: 10, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const straight = [
-    { value: 2, suit: "hearts" },
-    { value: 3, suit: "spades" },
-    { value: 4, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 5, suit: "hearts" },
-    { value: 14, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const flush = [
-    { value: 2, suit: "clubs" },
-    { value: 10, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 8, suit: "hearts" }
-];
-
-const fullHouse = [
-    { value: 2, suit: "clubs" },
-    { value: 10, suit: "hearts" },
-    { value: 2, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 2, suit: "spades" }
-];
-
-const fourKind = [
-    { value: 2, suit: "clubs" },
-    { value: 4, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 4, suit: "hearts" },
-    { value: 6, suit: "hearts" },
-    { value: 4, suit: "spades" }
-];
-
-const straightFlush = [
-    { value: 2, suit: "hearts" },
-    { value: 3, suit: "hearts" },
-    { value: 4, suit: "hearts" },
-    { value: 4, suit: "diamonds" },
-    { value: 5, suit: "hearts" },
-    { value: 14, suit: "hearts" },
-    { value: 8, suit: "spades" }
-];
-
-const royalFlush = [
-    { value: 2, suit: "clubs" },
-    { value: 10, suit: "hearts" },
-    { value: 12, suit: "hearts" },
-    { value: 14, suit: "hearts" },
-    { value: 4, suit: "hearts" },
-    { value: 11, suit: "hearts" },
-    { value: 13, suit: "hearts" }
-];
-
-initialHand.cards = royalFlush;
-
-/* *****************************************************************************************
-
-**
-
-** END IMPORTED CODE
-
-**
-
-**************************************************************************************** */
-
-const addAces = (hand, addSuit) => {
-    const newHand = {
-        ...hand
-    };
-    for (let i = 0; i < newHand.cards.length; i++) {
-        if (newHand.cards[i].value === 14) {
-            let newCard = { value: 1, suit: "none" };
-            if (addSuit) {
-                newCard.suit = newHand.cards[i].suit;
-            }
-            newHand.cards.push(newCard);
-        }
-    }
-    return newHand;
-};
-
-const removeAces = hand => {
-    const newHand = {
-        ...hand
-    };
-    for (let i = 0; i < newHand.cards.length; i = i) {
-        if (newHand.cards[i].value === 1) {
-            newHand.cards.splice(i, 1);
-        } else {
-            i++;
-        }
-    }
-    return newHand;
-};
-
-const valueSort = hand => {
-    const cards = [...hand.cards];
-    for (let i = 0; i < cards.length; i++) {
-        let temp = cards[i];
-        let j = i - 1;
-        // Sort in descending order
-        while (j >= 0 && cards[j].value < temp.value) {
-            cards[j + 1] = cards[j];
-            j--;
-        }
-        cards[j + 1] = temp;
-    }
-
-    const resultingHand = {
-        ...hand,
-        cards,
-        suit: null,
-        sort: "valueSort"
-    };
-    return resultingHand;
-};
-
-const suitSort = hand => {
-    // Since there are no situations where the suited sort doesn't also require a valueSort, this function should accomplish both
-    const sortedHand = valueSort(hand);
-
-    const hearts = [];
-    const clubs = [];
-    const diamonds = [];
-    const spades = [];
-    let suit = null;
-
-    for (let i = 0; i < sortedHand.cards.length; i++) {
-        switch (sortedHand.cards[i].suit) {
-            case "hearts":
-                hearts.push(sortedHand.cards[i]);
-                break;
-            case "clubs":
-                clubs.push(sortedHand.cards[i]);
-                break;
-            case "diamonds":
-                diamonds.push(sortedHand.cards[i]);
-                break;
-            default:
-                spades.push(sortedHand.cards[i]);
-        }
-    }
-
-    if (hearts.length > 4) {
-        suit = "hearts";
-    } else if (clubs.length > 4) {
-        suit = "clubs";
-    } else if (diamonds.length > 4) {
-        suit = "clubs";
-    } else if (spades.length > 4) {
-        suit = "clubs";
-    }
-
-    const resultingHand = {
-        ...sortedHand,
-        cards: [...hearts, ...clubs, ...diamonds, ...spades],
-        suit: suit,
-        sort: "suitSort"
-    };
-
-    return resultingHand;
-};
+const addAces = require("./aceManipulation").addAces;
+const removeAces = require("./aceManipulation").removeAces;
+const valueSort = require('./cardSorter').valueSort;
+const suitSort = require('./cardSorter').suitSort;
+const hands = require('./mockHands');
 
 // ROYAL FLUSH
+// export const checkForRoyalFlush = hand => {
 const checkForRoyalFlush = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updateRoyalFlush = currentHand => {
         currentHand.handTitle = "Royal Flush";
         currentHand.handRank = 10;
         return currentHand;
     };
     // check for Straight Flush
-    if (hand.handRank === 9 && hand.straightCards[0].value === 14) {
-        hand = updateRoyalFlush(hand);
+    if (resultingHand.handRank === 9 && resultingHand.straightCards[0].value === 14) {
+        resultingHand = updateRoyalFlush(resultingHand);
     }
-    return hand;
+    return resultingHand;
 };
 
 // STRAIGHT FLUSH
+// export const checkForStraightFlush = hand => {
 const checkForStraightFlush = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updateStraightFlush = currentHand => {
         currentHand.handTitle = "Straight Flush";
-		currentHand.handRank = 9;
-		currentHand.cardOrder = [hand.straightCards[0], hand.straightCards[1], hand.straightCards[2], hand.straightCards[3], hand.straightCards[4]];
+        currentHand.handRank = 9;
+        currentHand.cardOrder = [
+            resultingHand.straightCards[0],
+            resultingHand.straightCards[1],
+            resultingHand.straightCards[2],
+            resultingHand.straightCards[3],
+            resultingHand.straightCards[4]
+        ];
         return currentHand;
     };
     // check for straight
-    if (hand.straight) {
+    if (resultingHand.straight) {
         let update = true;
-        for (let i = 0; i < hand.straightCards.length; i++) {
-            if (hand.straightCards[i].suit !== hand.suit) {
-				for (let j = 0; j < hand.cards.length; j++) {
-					if(hand.straightCards[i].value === hand.cards[j].value && hand.cards[j].suit === hand.suit) {
-						hand.straightCards.splice(i, 1, hand.cards[j]);
-					}				
-				}
+        for (let i = 0; i < resultingHand.straightCards.length; i++) {
+            if (resultingHand.straightCards[i].suit !== resultingHand.suit) {
+                for (let j = 0; j < resultingHand.cards.length; j++) {
+                    if (
+                        resultingHand.straightCards[i].value === resultingHand.cards[j].value &&
+                        resultingHand.cards[j].suit === resultingHand.suit
+                    ) {
+                        resultingHand.straightCards.splice(i, 1, resultingHand.cards[j]);
+                    }
+                }
             }
-		}
-		for (let i = 0; i < hand.straightCards.length; i++) {
-			if (hand.straightCards[i].suit !== hand.suit) {
-				update = false;
-			}
-		}
+        }
+        for (let i = 0; i < resultingHand.straightCards.length; i++) {
+            if (resultingHand.straightCards[i].suit !== resultingHand.suit) {
+                update = false;
+            }
+        }
         if (update) {
-            hand = updateStraightFlush(hand);
+            resultingHand = updateStraightFlush(resultingHand);
         }
     }
 
-    return hand;
+    return resultingHand;
 };
 
 // 4 OF A KIND
+// export const checkForFourKind = hand => {
 const checkForFourKind = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updateFourKind = currentHand => {
         currentHand.handTitle = "Four of a Kind";
         currentHand.handRank = 8;
@@ -298,16 +80,18 @@ const checkForFourKind = hand => {
 
     // check for PAIR & if card #0 is the same as card #3
     if (
-        hand.numPairs > 2 &&
-        hand.cardOrder[0].value === hand.cardOrder[3].value
+        resultingHand.numPairs > 2 &&
+        resultingHand.cardOrder[0].value === resultingHand.cardOrder[3].value
     ) {
-        hand = updateFourKind(hand);
+        resultingHand = updateFourKind(resultingHand);
     }
-    return hand;
+    return resultingHand;
 };
 
 // FULL HOUSE
+// export const checkForFullHouse = hand => {
 const checkForFullHouse = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updateFullHouse = currentHand => {
         currentHand.handTitle = "Full House";
         currentHand.handRank = 7;
@@ -316,37 +100,36 @@ const checkForFullHouse = hand => {
 
     // check for PAIR & if card #0 is the same as card #2
     if (
-        hand.numPairs > 1 &&
-        ((hand.cardOrder[0].value === hand.cardOrder[2].value &&
-            hand.cardOrder[3].value === hand.cardOrder[4].value) ||
-            (hand.cardOrder[0].value === hand.cardOrder[1].value &&
-                hand.cardOrder[2].value === hand.cardOrder[4].value))
+        resultingHand.numPairs > 1 &&
+        ((resultingHand.cardOrder[0].value === resultingHand.cardOrder[2].value &&
+            resultingHand.cardOrder[3].value === resultingHand.cardOrder[4].value) ||
+            (resultingHand.cardOrder[0].value === resultingHand.cardOrder[1].value &&
+                resultingHand.cardOrder[2].value === resultingHand.cardOrder[4].value))
     ) {
-        hand = updateFullHouse(hand);
-        if (hand.cardOrder[2].value === hand.cardOrder[4].value) {
+        resultingHand = updateFullHouse(resultingHand);
+        if (resultingHand.cardOrder[2].value === resultingHand.cardOrder[4].value) {
             [
-                hand.cardOrder[0],
-                hand.cardOrder[1],
-                hand.cardOrder[2],
-                hand.cardOrder[3],
-                hand.cardOrder[4]
+                resultingHand.cardOrder[0],
+                resultingHand.cardOrder[1],
+                resultingHand.cardOrder[2],
+                resultingHand.cardOrder[3],
+                resultingHand.cardOrder[4]
             ] = [
-                hand.cardOrder[2],
-                hand.cardOrder[3],
-                hand.cardOrder[4],
-                hand.cardOrder[0],
-                hand.cardOrder[1]
+                resultingHand.cardOrder[2],
+                resultingHand.cardOrder[3],
+                resultingHand.cardOrder[4],
+                resultingHand.cardOrder[0],
+                resultingHand.cardOrder[1]
             ];
         }
     }
-    return hand;
+    return resultingHand;
 };
 
 // FLUSH
+// export const checkForFlush = hand => {
 const checkForFlush = hand => {
-    let resultingHand = {
-        ...hand
-    };
+    let resultingHand = Object.assign({}, hand);
 
     const cards = [];
 
@@ -415,10 +198,9 @@ const checkForFlush = hand => {
 };
 
 // STRAIGHT
+// export const checkForStraight = hand => {
 const checkForStraight = hand => {
-    let resultingHand = {
-        ...hand
-    };
+    let resultingHand = Object.assign({}, hand);
 
     let sequential = 0;
     let lastIndex = 0;
@@ -435,8 +217,14 @@ const checkForStraight = hand => {
             cards[i - 1],
             cards[i]
         ];
-		currentHand.straight = true;
-        currentHand.straightCards = [cards[i-4], cards[i-3], cards[i-2], cards[i-1], cards[i]];
+        currentHand.straight = true;
+        currentHand.straightCards = [
+            cards[i - 4],
+            cards[i - 3],
+            cards[i - 2],
+            cards[i - 1],
+            cards[i]
+        ];
         return currentHand;
     };
 
@@ -484,7 +272,9 @@ const checkForStraight = hand => {
 };
 
 // 3 OF A KIND
+// export const checkForThreeKind = hand => {
 const checkForThreeKind = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updateThreeKind = currentHand => {
         currentHand.handTitle = "Three of a Kind";
         currentHand.handRank = 4;
@@ -493,16 +283,18 @@ const checkForThreeKind = hand => {
 
     // check for PAIR & if card #0 is the same as card #2
     if (
-        hand.numPairs > 1 &&
-        hand.cardOrder[0].value === hand.cardOrder[2].value
+        resultingHand.numPairs > 1 &&
+        resultingHand.cardOrder[0].value === resultingHand.cardOrder[2].value
     ) {
-        hand = updateThreeKind(hand);
+        resultingHand = updateThreeKind(resultingHand);
     }
-    return hand;
+    return resultingHand;
 };
 
 // 2 PAIR
+// export const checkForTwoPair = hand => {
 const checkForTwoPair = hand => {
+    let resultingHand = Object.assign({}, hand);
     const updatePair = currentHand => {
         currentHand.handTitle = "Two Pair";
         currentHand.handRank = 3;
@@ -511,21 +303,20 @@ const checkForTwoPair = hand => {
 
     // check for PAIR; disqualify 3 of a kind
     if (
-        hand.numPairs === 2 &&
-        hand.cardOrder[0].value !== hand.cardOrder[2].value &&
-        hand.cardOrder[2].value !== hand.cardOrder[4].value
+        resultingHand.numPairs === 2 &&
+        resultingHand.cardOrder[0].value !== resultingHand.cardOrder[2].value &&
+        resultingHand.cardOrder[2].value !== resultingHand.cardOrder[4].value
     ) {
-        hand = updatePair(hand);
+        resultingHand = updatePair(resultingHand);
     }
-    return hand;
+    return resultingHand;
 };
 
 // PAIR
+// export const checkForPair = hand => {
 const checkForPair = hand => {
     // valueSort
-    let resultingHand = {
-        ...hand
-    };
+    let resultingHand = Object.assign({}, hand);
 
     let numPairs = 0;
     let cards = [];
@@ -575,6 +366,7 @@ const checkForPair = hand => {
 };
 
 // HIGH CARD
+// export const checkForHighCard = hand => {
 const checkForHighCard = hand => {
     // valueSort
     if (hand.sort !== "valueSort") {
@@ -588,50 +380,57 @@ const checkForHighCard = hand => {
 };
 
 const determineHand = hand => {
-    let resultingHand = {
-        ...hand
-    };
-    // Set the High Card
-    //   resultingHand = checkForHighCard(resultingHand);
+    // Create a new object to keep this function pure
+    let resultingHand = Object.assign({}, hand);
 
-    // Check #5: PAIR
+    // Check #1: PAIR
+    // This check will setup the Pair keys in the hand object for future reference
+    // This check also sets up the initial "cards" key whether a pair was found or not, setting up the High Card check in the process
     resultingHand = checkForPair(resultingHand);
 
-    // Check #1: STRAIGHT
+    // Check #2: STRAIGHT
+    // This check will setup the Straight keys in the hand object for future reference
     resultingHand = addAces(resultingHand, true);
     resultingHand = checkForStraight(resultingHand);
     resultingHand = removeAces(resultingHand);
 
-    // Check #4: FLUSH
+    // Check #3: FLUSH
+    // This check will determine if at least 5 cards have the same suit & set the appropriate key for future reference
     if (resultingHand.handRank < 6) {
         resultingHand = checkForFlush(resultingHand);
     }
 
-    // Check #2: STRAIGHT FLUSH
+    // Check #4: STRAIGHT FLUSH
+    // This is the highest check without any other dependencies other than those above
     if (resultingHand.suit && resultingHand.straight) {
         resultingHand = addAces(resultingHand, true);
         resultingHand = checkForStraightFlush(resultingHand);
         resultingHand = removeAces(resultingHand);
     }
 
-    // Check #3: ROYAL FLUSH
+    // Check #5: ROYAL FLUSH
+    // This check requires Straight Flush to already be complete
     if (resultingHand.handRank === 9) {
         resultingHand = checkForRoyalFlush(resultingHand);
     }
 
     // Check #6: 4 OF A KIND
+    // This check requires Pairs to be complete & Straight Flush to already be ruled out
     if (resultingHand.numPairs > 0 && resultingHand.handRank < 8) {
         resultingHand = checkForFourKind(resultingHand);
     }
     // Check #7: FULL HOUSE
+    // This check requires Pairs to be complete & 4 Kind to be ruled out
     if (resultingHand.numPairs > 1 && resultingHand.handRank < 7) {
         resultingHand = checkForFullHouse(resultingHand);
     }
     // Check #8: 3 OF A KIND
+    // This check requires Pairs to be complete & Full House to be ruled out
     if (resultingHand.numPairs > 0 && resultingHand.handRank < 4) {
         resultingHand = checkForThreeKind(resultingHand);
     }
     // Check #9: 2 PAIR
+    // This check requires Pairs to be complete & 3 Kind to be ruled out
     if (resultingHand.numPairs > 1 && resultingHand.handRank < 3) {
         resultingHand = checkForTwoPair(resultingHand);
     }
@@ -639,4 +438,18 @@ const determineHand = hand => {
     return resultingHand;
 };
 
-console.log(determineHand(initialHand));
+// export default determineHand;
+module.exports = {
+    checkForPair,
+    checkForTwoPair,
+    checkForThreeKind,
+    checkForStraight,
+    checkForFlush,
+    checkForFullHouse,
+    checkForFourKind,
+    checkForStraightFlush,
+    checkForRoyalFlush,
+    determineHand
+}
+
+// console.log(determineHand(initialHand));
