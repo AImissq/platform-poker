@@ -36,7 +36,7 @@ describe("****************** FUNCTION cardSorter ******************", () => {
             expect(startingHand).to.deep.equal(initialHand);
         });
 
-        it("should sort all cards by their values from high to low", () => {
+        it("should sort all cards by their values from high to low & update the sort", () => {
 			let newHand = Object.assign({}, initialHand);
 			const expectedCards = [
 				{ value: 14, suit: "diamonds" },
@@ -54,27 +54,113 @@ describe("****************** FUNCTION cardSorter ******************", () => {
 			];
 			newHand.cards = randomCards;
 			newHand = cardSorter.valueSort(newHand);
-			expect(newHand.cards).to.deep.equal(expectedCards);
-		});
-
-        it("should update the sort value of the returned object", () => {
-
+            expect(newHand.cards).to.deep.equal(expectedCards);
+            expect(newHand.sort).to.equal('valueSort');
 		});
     });
 
     describe("suitSort functionality", () => {
+        const randomCards = [
+			{ value: 3, suit: "spades" },
+			{ value: 8, suit: "clubs" },
+			{ value: 14, suit: "diamonds" },
+			{ value: 2, suit: "hearts" },
+			{ value: 5, suit: "spades" },
+			{ value: 5, suit: "clubs" },
+			{ value: 6, suit: "hearts" }
+		];
         it("should not edit the value of the original hand", () => {
             const startingHand = Object.assign({}, initialHand);
             cardSorter.suitSort(startingHand);
             expect(startingHand).to.deep.equal(initialHand);
         });
 
-        it("should sort the cards by the order of suits: hearts, clubs, diamonds, spades", () => {});
+        it("should sort the cards by the order of suits: hearts, clubs, diamonds, spades & update the sort value of the returned object", () => {
+            let newHand = Object.assign({}, initialHand);
+			const expectedCards = [
+                { value: 6, suit: "hearts" },
+                { value: 2, suit: "hearts" },
+                { value: 8, suit: "clubs" },
+                { value: 5, suit: "clubs" },
+                { value: 14, suit: "diamonds" },
+                { value: 5, suit: "spades" },
+                { value: 3, suit: "spades" }
+			];
+			newHand.cards = randomCards;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.cards).to.deep.equal(expectedCards);
+            expect(newHand.sort).to.equal('suitSort');
+        });
 
-        it("should update the sort value of the returned object", () => {});
+        it("should update suit=hearts if 5 cards are hearts", () => {
+            let newHand = Object.assign({}, initialHand);
+			const cardsHearts = [
+                { value: 6, suit: "hearts" },
+                { value: 2, suit: "hearts" },
+                { value: 8, suit: "clubs" },
+                { value: 7, suit: "hearts" },
+                { value: 14, suit: "diamonds" },
+                { value: 5, suit: "hearts" },
+                { value: 3, suit: "hearts" }
+			];
+			newHand.cards = cardsHearts;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.suit).to.equal('hearts');
+        });
 
-        it("should update the suit value of the returned object if 5 cards are the same suit", () => {});
+        it("should update suit=clubs if 5 cards are clubs", () => {
+            let newHand = Object.assign({}, initialHand);
+			const cardsHearts = [
+                { value: 6, suit: "clubs" },
+                { value: 2, suit: "clubs" },
+                { value: 8, suit: "clubs" },
+                { value: 7, suit: "hearts" },
+                { value: 14, suit: "clubs" },
+                { value: 5, suit: "clubs" },
+                { value: 3, suit: "hearts" }
+			];
+			newHand.cards = cardsHearts;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.suit).to.equal('clubs');
+        });
 
-        it("should leave the suit value of the returned object null if no suit has 5 cards", () => {});
+        it("should update suit=diamonds if 5 cards are diamonds", () => {
+            let newHand = Object.assign({}, initialHand);
+			const cardsHearts = [
+                { value: 6, suit: "diamonds" },
+                { value: 2, suit: "diamonds" },
+                { value: 8, suit: "clubs" },
+                { value: 7, suit: "diamonds" },
+                { value: 14, suit: "diamonds" },
+                { value: 5, suit: "hearts" },
+                { value: 3, suit: "diamonds" }
+			];
+			newHand.cards = cardsHearts;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.suit).to.equal('diamonds');
+        });
+
+        it("should update suit=spades if 5 cards are spades", () => {
+            let newHand = Object.assign({}, initialHand);
+			const cardsHearts = [
+                { value: 6, suit: "spades" },
+                { value: 2, suit: "hearts" },
+                { value: 8, suit: "spades" },
+                { value: 7, suit: "hearts" },
+                { value: 14, suit: "spades" },
+                { value: 5, suit: "spades" },
+                { value: 3, suit: "spades" }
+			];
+			newHand.cards = cardsHearts;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.suit).to.equal('spades');
+        });
+
+        it("should leave the suit value of the returned object null if no suit has 5 cards", () => {
+            let newHand = Object.assign({}, initialHand);
+			newHand.cards = randomCards;
+			newHand = cardSorter.suitSort(newHand);
+            expect(newHand.suit).to.equal(null);
+        });
     });
 });
