@@ -124,6 +124,6 @@ describe('****************** FUNCTION deckBuilder ******************', () => {
             const deckOne = deckBuilder.createDeck();
             const deckTwo = deckBuilder.shuffle(deckOne);
             expect(deckOne).to.not.deep.equal(deckTwo);
-        })
+        });
     });
 });
