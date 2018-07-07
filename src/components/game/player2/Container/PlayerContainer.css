@@ -1,0 +1,8 @@
+.playerContainer {
+    width: 362px;
+    max-width: 362px;
+    height: 224px;
+    max-height: 224px;
+    /* background-color: #ccffff; */
+    float: left;
+}
