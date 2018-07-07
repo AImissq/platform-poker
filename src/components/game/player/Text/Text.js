@@ -5,7 +5,7 @@ class Text extends Component {
 	render() {
 		return (
 		<div className='text' id=''>
-			<h1>Text</h1>
+			<h2>Text</h2>
 		</div>
 		);
 	}

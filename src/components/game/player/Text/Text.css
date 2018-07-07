@@ -1,6 +1,11 @@
 .text {
     width: 125px;
-    height: 50px;
     float: left;
-    background-color: '#ffaaaa';
+    background-color: #ffaaaa;
+    margin: 2px;
+}
+
+.text h2 {
+    margin: 0;
+    padding: 5px;
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './Container.css';
+import './PlayerContainer.css';
 import Avatar from '../Avatar/Avatar';
 import Card from '../Card/Card';
 import Text from '../Text/Text';
@@ -23,15 +23,15 @@ class PlayerContainer extends Component {
 			/>
 			<Text
 				content='My Name'
-				style='h2'
+				textStyle='h2'
 			/>
 			<Text
 				content='$25,000'
-				style='p'
+				textStyle='p'
 			/>
 			<Text
 				content='Call'
-				stype='p'
+				textStyle='p'
 			/>
 		</div>
 		);

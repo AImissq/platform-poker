@@ -1,6 +1,10 @@
 .card {
-    height: 100%;
+    border-radius: 10px 0 0 10px;
+    border: 1px solid #333333;
+    border-right: 0px;
+    height: 200px;
     width: 50px;
-    background-color: '#0000aa';
+    background-color: #fcfcfc;
     float: left;
+    margin-right: 1px;
 }

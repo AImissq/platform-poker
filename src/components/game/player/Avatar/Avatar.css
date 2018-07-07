@@ -1,7 +1,12 @@
 .avatar img {
-    height: 100%;
-    max-width: 75px;
-    width: 75px;
+    max-width: 125px;
     float: left;
-    background-color: '#aaffaa';
+}
+
+.avatar {
+    width: 125px;
+    height: 200px;
+    background-color: #aaffaa;
+    float: left;
+    margin: 2px;
 }
