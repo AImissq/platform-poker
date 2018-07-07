@@ -1,0 +1,7 @@
+.avatar img {
+    height: 100%;
+    max-width: 75px;
+    width: 75px;
+    float: left;
+    background-color: '#aaffaa';
+}
