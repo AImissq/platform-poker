@@ -4,19 +4,28 @@ import Text from '../Text/Text';
 import Rank from '../Rank/Rank';
 
 class Avatar extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			rank: 25,
+			cash: 25000,
+			lastAction: 'Fold'
+		}
+	}
+
 	render() {
 		return (
 		<div className='avatar' id=''>
 			<img src='http://tilomitra.com/wp-content/uploads/2014/08/avatar-cartoon.png' width='150px' alt='Avatar' />
 			<Rank
-				rank='25'
+				rank={this.state.rank}
 			/>
 			<Text
-				content='$25,000'
+				content={this.state.cash}
 				textStyle='p'
 			/>
 			<Text
-				content='Fold'
+				content={this.state.lastAction}
 				textStyle='p'
 			/>
 		</div>

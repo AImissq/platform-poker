@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+
 import './PlayerContainer.css';
 import Avatar from '../Avatar/Avatar';
 import Card from '../Card/Card';
@@ -8,26 +9,43 @@ import Timer from '../Timer/Timer';
 const features = {};
 
 class PlayerContainer extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			cards: [
+				{
+					value: 'unknown',
+					suit: 'unknown'
+				},
+				{
+					value: 'unknown',
+					suit: 'unknown'
+				}
+			],
+			timer: 120
+		}
+	}
+
 	render() {
 		return (
 		<div className='playerContainer' id=''>
 			<Card
-				value='unknown'
-				suit='unknown'
+				value={this.state.cards[0].value}
+				suit={this.state.cards[0].suit}
 			/>
 			<Card
-				value='unknown'
-				suit='unknown'
+				value={this.state.cards[1].value}
+				suit={this.state.cards[1].suit}
 			/>
 			<Avatar
-				features={features}
+				features={this.props.avatar}
 			/>
 			<Text
-				content='My Name'
+				content={this.props.name}
 				textStyle='h1'
 			/>
 			<Timer
-				time='120'
+				timer={this.state.timer}
 			/>
 		</div>
 		);

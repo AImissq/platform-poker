@@ -1,0 +1,42 @@
+COMPONENTS NEEDED:
+
+1 Chip
+5 Chip
+25 Chip
+100 Chip
+500 Chip
+5,000 Chip
+25,000 Chip
+100,000 Chip
+500,000 Chip
+1,000,000 Chip
+
+Graphics for card backs
+Fold Graphic
+Timer Bar
+Long button
+Circle button
+Extended text behind button
+
+Level of player
+
+Chip stack
+
+Stack of chips for pot and side pot
+    Small
+    Medium
+    Large
+    Very Large
+    Gigantic
+
+Component for revealed hand cards
+Component for table cards
+Component for card outs (bottom left)
+
+Countdown Component
+Logo
+Blinds & Antes Component
+Container for upper left
+
+Container for lower left
+
