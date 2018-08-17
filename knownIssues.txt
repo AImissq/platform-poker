@@ -1,0 +1,6 @@
+August 16, 2018 OBSERVATIONS:
+When the state is reset to include each player's cards, it deletes the existing state, including name, playerNumber, and type.
+
+Running flop, turn, and river resets those cards each time as the deck is altered.
+
+
