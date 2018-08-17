@@ -3,18 +3,18 @@ const dealPlayerCards = require("../../src/utils/dealPlayerCards");
 const deckBuilder = require("../../src/utils/deckBuilder");
 
 describe("****************** FUNCTION dealPlayerCards ******************", () => {
-    describe("verifyDeck functionality", () => {
+    describe("verifyDeckPlayer functionality", () => {
         it("should provide false if the numPlayers is impossible", () => {
             const deck = deckBuilder.createDeck();
 
-            expect(dealPlayerCards.verifyDeck(deck, 1, false)).to.equal(false);
-            expect(dealPlayerCards.verifyDeck(deck, 6, true)).to.equal(false);
+            expect(dealPlayerCards.verifyDeckPlayer(deck, 1, false)).to.equal(false);
+            expect(dealPlayerCards.verifyDeckPlayer(deck, 6, true)).to.equal(false);
         });
 
         it("should verify the deck has 52 cards before dealing to any number of players", () => {
             for (let i = 2; i < 6; i++) {
                 const deck = deckBuilder.createDeck();
-                expect(dealPlayerCards.verifyDeck(deck, i, false)).to.equal(
+                expect(dealPlayerCards.verifyDeckPlayer(deck, i, false)).to.equal(
                     true
                 );
             }
@@ -24,7 +24,7 @@ describe("****************** FUNCTION dealPlayerCards ******************", () =>
             for (let i = 2; i < 6; i++) {
                 const deck = deckBuilder.createDeck();
                 deck.splice(0, i * 2);
-                expect(dealPlayerCards.verifyDeck(deck, i, true)).to.equal(
+                expect(dealPlayerCards.verifyDeckPlayer(deck, i, true)).to.equal(
                     true
                 );
             }

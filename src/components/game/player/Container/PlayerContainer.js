@@ -11,32 +11,27 @@ class PlayerContainer extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			cards: [
-				{
-					value: 'unknown',
-					suit: 'unknown'
-				},
-				{
-					value: 'unknown',
-					suit: 'unknown'
-				}
-			],
 			timer: 120
 		};
 	}
 
-
 	render() {
 		return (
-			<div className='playerContainer' id=''>
-				<Card
-					value={this.state.cards[0].value}
-					suit={this.state.cards[0].suit}
-				/>
-				<Card
-					value={this.state.cards[1].value}
-					suit={this.state.cards[1].suit}
-				/>
+			<div className='playerContainer'>
+				{this.props.cards ?
+					<Card
+						value={this.props.cards[0].value}
+						suit={this.props.cards[0].suit}
+					/>
+					: null
+				}
+				{this.props.cards ?
+					<Card
+						value={this.props.cards[1].value}
+						suit={this.props.cards[1].suit}
+					/>
+					: null
+				}
 				<Avatar
 					features={this.props.avatar}
 				/>

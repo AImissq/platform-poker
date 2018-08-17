@@ -1,4 +1,4 @@
-const verifyDeck = (deck, numPlayers, event) => {
+const verifyDeckTable = (deck, numPlayers, event) => {
 	if(numPlayers > 5 || numPlayers < 2) {
 		return false;
 	}
@@ -67,7 +67,7 @@ const logDeck = (flop, turn, river, deck) => {
 };
 
 module.exports = {
-	verifyDeck,
+	verifyDeckTable,
 	flop,
 	turn,
 	river,

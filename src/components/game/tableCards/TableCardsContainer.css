@@ -1,0 +1,10 @@
+.TableCardsContainer {
+    height: 300px;
+    width: 100%;
+    float: left;
+}
+
+.dealtCardsContainer {
+    height: 300px;
+    float: right;
+}

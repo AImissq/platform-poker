@@ -1,4 +1,4 @@
-const verifyDeck = (deck, numPlayers, dealt) => {
+const verifyDeckPlayer = (deck, numPlayers, dealt) => {
     if (numPlayers > 5 || numPlayers < 2) {
         return false;
     }
@@ -32,6 +32,6 @@ const deal = (deck, numPlayers) => {
 };
 
 module.exports = {
-    verifyDeck,
+    verifyDeckPlayer,
     deal
 };

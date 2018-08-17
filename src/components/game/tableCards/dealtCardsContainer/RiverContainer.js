@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DealtCard from './dealtCards/DealtCard';
+import './dealtCardsContainer.css';
 
 export default class RiverContainer extends Component {
 	constructor(props) {
@@ -10,17 +11,13 @@ export default class RiverContainer extends Component {
 	}
 
 	render() {
-		const river = (
-			<div>
-				<DealtCard
-					card={{ value: 10, suit: 'spades', display: '10' }}
-				/>
-			</div>
-		);
-
 		return (
-			<div>
-				{this.state.ready && river}
+			<div className='dealtCardsContainer'>
+				{this.state.ready ?
+					<DealtCard
+						card={this.props.card[0]}
+					/>
+					: null}
 			</div>
 		);
 	}

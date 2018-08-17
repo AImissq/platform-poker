@@ -3,20 +3,20 @@ const dealTableCards = require("../../src/utils/dealTableCards");
 const deckBuilder = require("../../src/utils/deckBuilder");
 
 describe("****************** FUNCTION dealTableCards ******************", () => {
-    describe("verifyDeck functionality", () => {
+    describe("verifyDeckTable functionality", () => {
         it('should provide false if the numPlayers is impossible', () => {
             const deck = deckBuilder.createDeck();
             const event = "preFlop";
             
-            expect(dealTableCards.verifyDeck(deck, 1, event)).to.equal(false);
-            expect(dealTableCards.verifyDeck(deck, 6, event)).to.equal(false);
+            expect(dealTableCards.verifyDeckTable(deck, 1, event)).to.equal(false);
+            expect(dealTableCards.verifyDeckTable(deck, 6, event)).to.equal(false);
         });
 
         it('should provide false if an improper event is passed', () => {
             const deck = deckBuilder.createDeck();
             const event = "Flop";
             
-            expect(dealTableCards.verifyDeck(deck, 2, event)).to.equal(false);
+            expect(dealTableCards.verifyDeckTable(deck, 2, event)).to.equal(false);
         });
 
         it("should verify the deck is the correct length before dealing the flop", () => {
@@ -25,7 +25,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
             for (let i = 2; i < 6; i++) {
                 const deck = deckBuilder.createDeck();
                 deck.splice(0, i*2);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
 
@@ -36,7 +36,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
                 const deck = deckBuilder.createDeck();
                 deck.splice(0, i*2);
                 dealTableCards.flop(deck);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
 
@@ -47,7 +47,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
                 const deck = deckBuilder.createDeck();
                 deck.splice(0, i*2);
                 dealTableCards.flop(deck);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
 
@@ -59,7 +59,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
                 deck.splice(0, i*2);
                 dealTableCards.flop(deck);
                 dealTableCards.turn(deck);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
 
@@ -71,7 +71,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
                 deck.splice(0, i*2);
                 dealTableCards.flop(deck);
                 dealTableCards.turn(deck);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
 
@@ -84,7 +84,7 @@ describe("****************** FUNCTION dealTableCards ******************", () => 
                 dealTableCards.flop(deck);
                 dealTableCards.turn(deck);
                 dealTableCards.river(deck);
-                expect(dealTableCards.verifyDeck(deck, i, event)).to.equal(true);                
+                expect(dealTableCards.verifyDeckTable(deck, i, event)).to.equal(true);                
             }
         });
     });

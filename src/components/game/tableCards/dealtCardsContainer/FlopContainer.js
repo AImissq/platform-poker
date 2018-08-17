@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import DealtCard from './dealtCards/DealtCard';
+import './dealtCardsContainer.css';
 
 export default class FlopContainer extends Component {
 	constructor(props) {
@@ -10,23 +11,26 @@ export default class FlopContainer extends Component {
 	}
 
 	render() {
-		const turn = (
-			<div>
-				<DealtCard
-					card={{ value: 14, suit: 'hearts', display: 'A' }}
-				/>
-				<DealtCard
-					card={{ value: 13, suit: 'hearts', display: 'K' }}
-				/>
-				<DealtCard
-					card={{ value: 12, suit: 'hearts', display: 'Q' }}
-				/>
-			</div>
-		);
-
 		return (
-			<div>
-				{this.state.ready && turn}
+			<div className='dealtCardsContainer'>
+				{this.state.ready ?
+					<DealtCard
+						card={this.props.cards[0]}
+					/>
+					: null
+				}
+				{this.state.ready ?
+					<DealtCard
+						card={this.props.cards[1]}
+					/>
+					: null
+				}
+				{this.state.ready ?
+					<DealtCard
+						card={this.props.cards[2]}
+					/>
+					: null
+				}
 			</div>
 		);
 	}
