@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
-import { deal, createDeck } from '../../../utils';
+import { deal, createDeck, flop, turn, river } from '../../../utils';
 
 export default class PlayArea extends Component {
 	constructor(props) {
@@ -39,6 +39,7 @@ export default class PlayArea extends Component {
 	componentDidMount() {
 		const deck = createDeck();
 		this.dealToPlayers(deck);
+		this.dealTableCards(deck);
 	}
 
 	async dealToPlayers(deck) {
@@ -49,9 +50,6 @@ export default class PlayArea extends Component {
 		if(this.state.playerCenter) { numPlayers++;}
 		if(this.state.playerBottomLeft) { numPlayers++;}
 		if(this.state.playerBottomRight) { numPlayers++;}
-
-		console.log('numPlayers', numPlayers);
-		console.log('deck', deck);
 
 		const hands = await deal(deck, numPlayers);
 
@@ -94,10 +92,18 @@ export default class PlayArea extends Component {
 			...tempState,
 			deck
 		});
-		console.log('hands', hands);
-		console.log('state', this.state);
-		console.log('tempState', tempState);
-		console.log('deck after', deck);
+	}
+
+	async dealTableCards(deck) {
+		const tableCards = {
+			flop: await flop(deck),
+			turn: await turn(deck),
+			river: await river(deck)
+		};
+		this.setState({
+			tableCards
+		});
+		console.log(this.state);
 	}
 
 	render() {
@@ -145,6 +151,7 @@ export default class PlayArea extends Component {
 				}
 				<TableCardsContainer
 					deck={this.state.deck}
+					tableCards={this.state.tableCards}
 				/>
 				{this.state.playerCenter ?
 					<PlayerContainer
