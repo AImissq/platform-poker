@@ -57,31 +57,46 @@ export default class PlayArea extends Component {
 			if(this.state.playerTopRight && !tempState.playerTopRight) {
 				tempState = {
 					...tempState,
-					playerTopRight: { hand }
+					playerTopRight: { 
+						...this.state.playerTopRight,
+						hand
+					}
 				};
 			}
 			else if(this.state.playerTopLeft && !tempState.playerTopLeft) {
 				tempState = {
 					...tempState,
-					playerTopLeft: { hand }
+					playerTopLeft: {
+						...this.state.playerTopLeft,
+						hand
+					}
 				};
 			}
 			else if(this.state.playerCenter && !tempState.playerCenter) {
 				tempState = {
 					...tempState,
-					playerCenter: { hand }
+					playerCenter: {
+						...this.state.playerCenter,
+						hand
+					}
 				};
 			}
 			else if(this.state.playerBottomLeft && !tempState.playerBottomLeft) {
 				tempState = {
 					...tempState,
-					playerBottomLeft: { hand }
+					playerBottomLeft: {
+						...this.state.playerBottomLeft,
+						hand
+					}
 				};
 			}
 			else if(this.state.playerBottomRight && !tempState.playerBottomRight) {
 				tempState = {
 					...tempState,
-					playerBottomRight: { hand }
+					playerBottomRight: {
+						...this.state.playerBottomRight,
+						hand
+					}
 				};
 			}
 			return tempState;
