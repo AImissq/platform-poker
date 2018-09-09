@@ -29,12 +29,16 @@ export class TableCardsContainer extends Component {
 			</div>
 		);
 
+		const flopCards = this.props.flopIsVisible ? this.props.tableCards.flop : null;
+		const turnCard = this.props.turnIsVisible ? this.props.tableCards.turn : null;
+		const riverCard = this.props.riverIsVisible ? this.props.tableCards.river : null;
+
 		return (
 			<div className='TableCardsContainer'>
 				{buttonsInstance}
-				{this.props.riverIsVisible ? <RiverContainer className='dealtCardsContainer' card={this.props.tableCards.river} /> : null}
-				{this.props.turnIsVisible ? <TurnContainer className='dealtCardsContainer' card={this.props.tableCards.turn} /> : null}
-				{this.props.flopIsVisible ? <FlopContainer className='dealtCardsContainer' cards={this.props.tableCards.flop} /> : null}
+				<RiverContainer className='dealtCardsContainer' card={riverCard} />
+				<TurnContainer className='dealtCardsContainer' card={turnCard} />
+				<FlopContainer className='dealtCardsContainer' cards={flopCards} />
 			</div>
 		);
 	}

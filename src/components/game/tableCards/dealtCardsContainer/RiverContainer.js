@@ -3,17 +3,10 @@ import DealtCard from './dealtCards/DealtCard';
 import './dealtCardsContainer.css';
 
 export default class RiverContainer extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			ready: true
-		};
-	}
-
 	render() {
 		return (
-			<div className='dealtCardsContainer'>
-				{this.state.ready ?
+			<div className='dealtCardsContainer river'>
+				{this.props.card ?
 					<DealtCard
 						card={this.props.card[0]}
 					/>
