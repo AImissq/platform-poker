@@ -3,3 +3,4 @@ export const DEAL_TABLE_CARDS = 'DEAL_TABLE_CARDS';
 export const SHOW_FLOP_CARDS = 'SHOW_FLOP_CARDS';
 export const SHOW_TURN_CARDS = 'SHOW_TURN_CARDS';
 export const SHOW_RIVER_CARD = 'SHOW_RIVER_CARD';
+export const START_NEW_GAME = 'START_NEW_GAME';

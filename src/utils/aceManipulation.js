@@ -20,7 +20,7 @@ const addAces = (hand, addSuit) => {
 const removeAces = hand => {
     const newHand = Object.assign({}, hand);
 
-    for (let i = 0; i < newHand.cards.length; i = i) {
+    for (let i = 0; i < newHand.cards.length; i) {
         if (newHand.cards[i].value === 1) {
             newHand.cards.splice(i, 1);
         } else {

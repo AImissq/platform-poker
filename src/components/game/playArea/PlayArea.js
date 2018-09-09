@@ -6,12 +6,7 @@ import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
 import { createDeck, deal } from '../../../utils';
 
-import {
-	dealTableCards,
-	showFlopCards,
-	showTurnCard,
-	showRiverCard
-} from '../../../actions/tableCardActions';
+import { dealTableCards } from '../../../actions/tableCardActions';
 
 export class PlayArea extends Component {
 	constructor(props) {

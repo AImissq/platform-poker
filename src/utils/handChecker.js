@@ -6,7 +6,7 @@ const addAces = require("./aceManipulation").addAces;
 const removeAces = require("./aceManipulation").removeAces;
 const valueSort = require('./cardSorter').valueSort;
 const suitSort = require('./cardSorter').suitSort;
-const hands = require('./mockHands');
+// const hands = require('./mockHands');
 
 // ROYAL FLUSH
 // export const checkForRoyalFlush = hand => {
@@ -367,17 +367,17 @@ const checkForPair = hand => {
 
 // HIGH CARD
 // export const checkForHighCard = hand => {
-const checkForHighCard = hand => {
-    // valueSort
-    if (hand.sort !== "valueSort") {
-        hand = valueSort(hand);
-    }
-    // update Card Order
-    for (let i = 0; i < 5; i++) {
-        hand.cardOrder.push(hand.cards[i]);
-    }
-    return hand;
-};
+// const checkForHighCard = hand => {
+//     // valueSort
+//     if (hand.sort !== "valueSort") {
+//         hand = valueSort(hand);
+//     }
+//     // update Card Order
+//     for (let i = 0; i < 5; i++) {
+//         hand.cardOrder.push(hand.cards[i]);
+//     }
+//     return hand;
+// };
 
 const determineHand = hand => {
     // Create a new object to keep this function pure

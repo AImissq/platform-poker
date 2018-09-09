@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 import {RiverContainer, TurnContainer, FlopContainer} from './dealtCardsContainer';
 import './TableCardsContainer.css';
-import { flop, turn, river } from '../../../utils';
 
 import {
 	showFlopCards,
@@ -24,15 +23,9 @@ export class TableCardsContainer extends Component {
 
 		const buttonsInstance = (
 			<div className="well" style={wellStyles}>
-				<Button bsStyle="primary" bsSize="large" block onClick={this.props.showFlopCards}>
-					{this.props.flopIsVisible ? 'Hide the flop' : 'Show the flop'}
-				</Button>
-				<Button bsStyle="primary" bsSize="large" block onClick={this.props.showTurnCard}>
-					{this.props.turnIsVisible ? 'Hide the turn' : 'Show the turn'}
-				</Button>
-				<Button bsStyle="primary" bsSize="large" block onClick={this.props.showRiverCard}>
-					{this.props.riverIsVisible ? 'Hide the river' : 'Show the river'}
-				</Button>
+				{!this.props.flopIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showFlopCards}>Show the flop</Button> : null }
+				{this.props.flopIsVisible && !this.props.turnIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showTurnCard}>Show the turn</Button> : null}
+				{this.props.flopIsVisible && this.props.turnIsVisible && !this.props.riverIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showRiverCard}>Show the river</Button> : null}
 			</div>
 		);
 
@@ -52,7 +45,7 @@ TableCardsContainer.propTypes = {
 	showTurnCard: PropTypes.func.isRequired,
 	showRiverCard: PropTypes.func.isRequired,
 
-}
+};
 
 const mapStateToProps = state => ({
 	flopIsVisible: state.tableCardStatus.flopIsVisible,
