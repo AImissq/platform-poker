@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
-import postReducer from './postReducer';
+import tableCardReducer from './tableCardReducer';
+import tableCardStatusReducer from './tableCardStatusReducer';
 
 export default combineReducers({
-    posts: postReducer
+	tableCards: tableCardReducer,
+	tableCardStatus: tableCardStatusReducer
 });

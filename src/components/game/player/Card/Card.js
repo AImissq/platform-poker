@@ -3,7 +3,7 @@ import './Card.css';
 
 class Card extends Component {
 	componentDidMount() {
-		console.log('props', this.props);
+		// console.log('props', this.props);
 	}
 	
 	checkForPaint() {

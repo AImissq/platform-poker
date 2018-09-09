@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
 import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
-import { deal, createDeck, flop, turn, river } from '../../../utils';
+import { createDeck, deal } from '../../../utils';
 
-export default class PlayArea extends Component {
+import {
+	dealTableCards,
+	showFlopCards,
+	showTurnCard,
+	showRiverCard
+} from '../../../actions/tableCardActions';
+
+export class PlayArea extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -36,10 +46,13 @@ export default class PlayArea extends Component {
 		};
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		const deck = createDeck();
+		this.props.dealTableCards(deck);
 		this.dealToPlayers(deck);
-		this.dealTableCards(deck);
+		this.setState({
+			deck
+		});
 	}
 
 	async dealToPlayers(deck) {
@@ -109,18 +122,6 @@ export default class PlayArea extends Component {
 		});
 	}
 
-	async dealTableCards(deck) {
-		const tableCards = {
-			flop: await flop(deck),
-			turn: await turn(deck),
-			river: await river(deck)
-		};
-		this.setState({
-			tableCards
-		});
-		console.log(this.state);
-	}
-
 	render() {
 		return (
 			<div>
@@ -166,7 +167,7 @@ export default class PlayArea extends Component {
 				}
 				<TableCardsContainer
 					deck={this.state.deck}
-					tableCards={this.state.tableCards}
+					tableCards={this.props.tableCards}
 				/>
 				{this.state.playerCenter ?
 					<PlayerContainer
@@ -182,3 +183,18 @@ export default class PlayArea extends Component {
 		);
 	}
 }
+
+PlayArea.propTypes = {
+	dealTableCards: PropTypes.func.isRequired,
+	tableCards: PropTypes.object.isRequired
+};
+
+PlayArea.defaultProps = {
+	tableCards: {}
+};
+
+const mapStateToProps = state => ({
+	tableCards: state.tableCards.tableCards
+});
+
+export default connect(mapStateToProps, {dealTableCards})(PlayArea);

@@ -1,2 +1,5 @@
-export const FETCH_POSTS = 'FETCH_POSTS';
-export const NEW_POST = 'NEW_POST';
+export const CREATE_THE_DECK = 'CREATE_THE_DECK';
+export const DEAL_TABLE_CARDS = 'DEAL_TABLE_CARDS';
+export const SHOW_FLOP_CARDS = 'SHOW_FLOP_CARDS';
+export const SHOW_TURN_CARDS = 'SHOW_TURN_CARDS';
+export const SHOW_RIVER_CARD = 'SHOW_RIVER_CARD';
