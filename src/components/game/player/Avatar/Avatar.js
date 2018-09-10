@@ -10,7 +10,21 @@ class Avatar extends Component {
 			rank: 25,
 			cash: 25000,
 			lastAction: 'Fold'
+		};
+	}
+
+	addCommasToCash = cash => {
+		let cashAsString = this.state.cash.toString();
+		let cashArray = [];
+		for (let i = cashAsString.length; i > 0; i = i - 3) {
+			if(i === cashAsString.length) {
+				cashArray.unshift(cashAsString.slice(-3));
+			}
+			else {
+				cashArray.unshift(cashAsString.slice(i - cashAsString.length - 3, i - cashAsString.length));
+			}
 		}
+		return '$' + cashArray.join(',');
 	}
 
 	render() {
@@ -21,7 +35,7 @@ class Avatar extends Component {
 				rank={this.state.rank}
 			/>
 			<Text
-				content={this.state.cash}
+				content={this.addCommasToCash(this.state.cash)}
 				textStyle='p'
 			/>
 			<Text

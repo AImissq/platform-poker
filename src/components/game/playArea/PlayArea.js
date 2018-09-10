@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
+import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
@@ -121,43 +122,63 @@ export class PlayArea extends Component {
 		return (
 			<div>
 				{this.state.playerTopRight ?
-					<PlayerContainer
-						cards={this.state.playerTopRight.hand}
-						avatar={{}}
-						name={this.state.playerTopRight.name}
-						playerNumber={this.state.playerTopRight.playerNumber}
-						type={this.state.playerTopRight.type}
-					/>
+					<div style={{float: 'left'}}>
+						<PlayerContainer
+							cards={this.state.playerTopRight.hand}
+							avatar={{}}
+							name={this.state.playerTopRight.name}
+							playerNumber={this.state.playerTopRight.playerNumber}
+							type={this.state.playerTopRight.type}
+						/>
+						<PlayerControlsContainer 
+							playerNumber={this.state.playerTopRight.playerNumber}
+						/>
+					</div>
 					: null
 				}
 				{this.state.playerTopLeft ?
-					<PlayerContainer
-						cards={this.state.playerTopLeft.hand}
-						avatar={{}}
-						name={this.state.playerTopLeft.name}
-						playerNumber={this.state.playerTopLeft.playerNumber}
-						type={this.state.playerTopLeft.type}
-					/>
+					<div style={{float: 'left'}}>
+						<PlayerContainer
+							cards={this.state.playerTopLeft.hand}
+							avatar={{}}
+							name={this.state.playerTopLeft.name}
+							playerNumber={this.state.playerTopLeft.playerNumber}
+							type={this.state.playerTopLeft.type}
+						/>
+						<PlayerControlsContainer 
+							playerNumber={this.state.playerTopLeft.playerNumber}
+						/>
+					</div>
 					: null
 				}
 				{this.state.playerBottomLeft ?
-					<PlayerContainer
-						cards={this.state.playerBottomLeft.hand}
-						avatar={{}}
-						name={this.state.playerBottomLeft.name}
-						playerNumber={this.state.playerBottomLeft.playerNumber}
-						type={this.state.playerBottomLeft.type}
-					/>
+					<div style={{float: 'left'}}>
+						<PlayerContainer
+							cards={this.state.playerBottomLeft.hand}
+							avatar={{}}
+							name={this.state.playerBottomLeft.name}
+							playerNumber={this.state.playerBottomLeft.playerNumber}
+							type={this.state.playerBottomLeft.type}
+						/>
+						<PlayerControlsContainer 
+							playerNumber={this.state.playerBottomLeft.playerNumber}
+						/>
+					</div>
 					: null
 				}
 				{this.state.playerBottomRight ?
-					<PlayerContainer
-						cards={this.state.playerBottomRight.hand}
-						avatar={{}}
-						name={this.state.playerBottomRight.name}
-						playerNumber={this.state.playerBottomRight.playerNumber}
-						type={this.state.playerBottomRight.type}
-					/>
+					<div style={{float: 'left'}}>
+						<PlayerContainer
+							cards={this.state.playerBottomRight.hand}
+							avatar={{}}
+							name={this.state.playerBottomRight.name}
+							playerNumber={this.state.playerBottomRight.playerNumber}
+							type={this.state.playerBottomRight.type}
+						/>
+						<PlayerControlsContainer 
+							playerNumber={this.state.playerBottomRight.playerNumber}
+						/>
+					</div>
 					: null
 				}
 				<TableCardsContainer
@@ -165,13 +186,18 @@ export class PlayArea extends Component {
 					tableCards={this.props.tableCards}
 				/>
 				{this.state.playerCenter ?
-					<PlayerContainer
-						cards={this.state.playerCenter.hand}
-						avatar={{}}
-						name={this.state.playerCenter.name}
-						playerNumber={this.state.playerCenter.playerNumber}
-						type={this.state.playerCenter.type}
-					/>
+					<div style={{float: 'left'}}>
+						<PlayerContainer
+							cards={this.state.playerCenter.hand}
+							avatar={{}}
+							name={this.state.playerCenter.name}
+							playerNumber={this.state.playerCenter.playerNumber}
+							type={this.state.playerCenter.type}
+						/>
+						<PlayerControlsContainer 
+							playerNumber={this.state.playerCenter.playerNumber}
+						/>
+					</div>
 					: null
 				}
 			</div>
