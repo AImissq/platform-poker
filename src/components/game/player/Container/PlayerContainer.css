@@ -8,3 +8,13 @@
     margin: 50px;
     margin-right: 0px;
 }
+
+.emptyCard {
+    border: 1px solid transparent;
+    border-right: 0px;
+    height: 200px;
+    width: 50px;
+    background-color: transparent;
+    float: left;
+    margin-right: 1px;
+}

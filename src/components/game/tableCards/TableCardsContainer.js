@@ -18,14 +18,29 @@ export class TableCardsContainer extends Component {
 		});
 	}
 
+	showTheFlop = () => {
+		this.props.showFlopCards();
+		this.props.resetPlayers();
+	}
+
+	showTheTurn = () => {
+		this.props.showTurnCard();
+		this.props.resetPlayers();
+	}
+
+	showTheRiver = () => {
+		this.props.showRiverCard();
+		this.props.resetPlayers();
+	}
+
 	render() {
 		const wellStyles = { maxWidth: 400, minWidth: 200, margin: '0 auto 10px', float: 'left' };
 
 		const buttonsInstance = (
 			<div className="well" style={wellStyles}>
-				{!this.props.flopIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showFlopCards}>Show the flop</Button> : null }
-				{this.props.flopIsVisible && !this.props.turnIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showTurnCard}>Show the turn</Button> : null}
-				{this.props.flopIsVisible && this.props.turnIsVisible && !this.props.riverIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.props.showRiverCard}>Show the river</Button> : null}
+				{!this.props.flopIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheFlop}>Show the flop</Button> : null }
+				{this.props.flopIsVisible && !this.props.turnIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheTurn}>Show the turn</Button> : null}
+				{this.props.flopIsVisible && this.props.turnIsVisible && !this.props.riverIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheRiver}>Show the river</Button> : null}
 			</div>
 		);
 

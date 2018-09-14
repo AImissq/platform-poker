@@ -7,7 +7,7 @@ export default function(state = initialState, action) {
 	case DEAL_TABLE_CARDS:
 		return {
 			...state,
-			tableCards: action.payload
+			...action.payload
 		};
 	default:
 		return state;

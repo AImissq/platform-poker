@@ -23,14 +23,14 @@ class PlayerContainer extends Component {
 						value={this.props.cards[0].value}
 						suit={this.props.cards[0].suit}
 					/>
-					: null
+					: <div className='emptyCard'></div>
 				}
 				{this.props.cards ?
 					<Card
 						value={this.props.cards[1].value}
 						suit={this.props.cards[1].suit}
 					/>
-					: null
+					: <div className='emptyCard'></div>
 				}
 				<Avatar
 					features={this.props.avatar}

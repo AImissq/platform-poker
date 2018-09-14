@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
 import tableCardReducer from './tableCardReducer';
 import tableCardStatusReducer from './tableCardStatusReducer';
+import createPlayersReducer from './playersReducer';
 
 export default combineReducers({
 	tableCards: tableCardReducer,
-	tableCardStatus: tableCardStatusReducer
+	tableCardStatus: tableCardStatusReducer,
+	players: createPlayersReducer
 });
