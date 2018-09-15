@@ -2,22 +2,22 @@ import { ADD_TO_MAIN_POT, ADD_TO_SIDEPOT_ONE, ADD_TO_SIDEPOT_TWO, ADD_TO_SIDEPOT
 
 const initialState = {
 	main: {
-		amount: 0,
+		total: 0,
 		players: [],
 		full: false
 	},
 	sidepotOne: {
-		amount: 0,
+		total: 0,
 		players: [],
 		full: false
 	},
 	sidepotTwo: {
-		amount: 0,
+		total: 0,
 		players: [],
 		full: false
 	},
 	sidepotThree: {
-		amount: 0,
+		total: 0,
 		players: [],
 		full: false
 	}

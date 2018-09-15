@@ -14,3 +14,4 @@ export const dealToPlayers = handData => dispatch => {
 		payload: {...handData}
 	});
 };
+

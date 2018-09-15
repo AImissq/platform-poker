@@ -10,6 +10,12 @@ import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
 import { createPlayers, dealToPlayers } from '../../../actions/playersActions';
+import {
+	addToMainPot,
+	// addToSidepotOne,
+	// addToSidepotTwo,
+	// addToSidepotThree
+} from '../../../actions/potActions';
 
 const players = {
 	playerTopRight: {
@@ -181,9 +187,10 @@ export class PlayArea extends Component {
 			console.log('player can bet');
 			if(playerInfo.cash >= this.state.currentBet) {
 				console.log('first if statement is met');
-				this.setState({
-					pot: this.state.pot + this.state.currentBet
-				});
+				this.props.addToMainPot(
+					// playerInfo, amountOfBet, potInfo
+					playerInfo, this.state.currentBet, this.props.pot
+				);
 				// TODO: Update player's cash in redux
 				// TODO: Update player's last action to 'Call' in redux
 			}
@@ -206,8 +213,11 @@ export class PlayArea extends Component {
 		console.log('RAISE for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			if(playerInfo.cash >= this.state.currentBet + this.state.minRaise) {
+				this.props.addToMainPot(
+					// playerInfo, amountOfBet, potInfo
+					playerInfo, this.state.currentBet + this.state.minRaise, this.props.pot
+				);
 				this.setState({
-					pot: this.state.pot + this.state.currentBet + this.state.minRaise,
 					currentBet: this.state.currentBet + this.state.minRaise
 				});
 				// TODO: Update player's cash in redux
@@ -318,7 +328,7 @@ export class PlayArea extends Component {
 					: <div style={{width: '60%', margin: '0 auto'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
 				}
 
-				<div style={{fontSize: '2em', width: '80%', margin: '0 auto', marginTop: '20px'}}>Pot: <strong>${this.state.pot}</strong> | Action is on player <strong>{this.state.actionOnPlayer}</strong></div>
+				<div style={{fontSize: '2em', width: '80%', margin: '0 auto', marginTop: '20px'}}>Pot: <strong>${this.props.pot.main.total}</strong> | Action is on player <strong>{this.state.actionOnPlayer}</strong></div>
 
 				{this.props.players.playerCenter ?
 					<div style={{float: 'left'}}>
@@ -348,18 +358,42 @@ PlayArea.propTypes = {
 	dealTableCards: PropTypes.func.isRequired,
 	tableCards: PropTypes.object.isRequired,
 	dealToPlayers: PropTypes.func.isRequired,
-	createPlayers: PropTypes.func.isRequired
-
+	createPlayers: PropTypes.func.isRequired,
+	addToMainPot: PropTypes.func.isRequired,
+	pot: PropTypes.object
 };
 
 PlayArea.defaultProps = {
 	tableCards: {},
-	players: {}
+	players: {},
+	pot: {
+		main: {
+			total: 0,
+			players: [],
+			full: false
+		},
+		sidepotOne: {
+			total: 0,
+			players: [],
+			full: false
+		},
+		sidepotTwo: {
+			total: 0,
+			players: [],
+			full: false
+		},
+		sidepotThree: {
+			total: 0,
+			players: [],
+			full: false
+		}
+	}
 };
 
 const mapStateToProps = state => ({
 	tableCards: state.tableCards,
-	players: state.players
+	players: state.players,
+	pot: state.pot
 });
 
-export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers})(PlayArea);
+export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToMainPot})(PlayArea);

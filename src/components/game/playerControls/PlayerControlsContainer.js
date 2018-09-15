@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
-
-import {
-	addToMainPot,
-	// addToSidepotOne,
-	// addToSidepotTwo,
-	// addToSidepotThree
-} from '../../../actions/potActions';
 
 import './PlayerControlsContainer.css';
 
@@ -56,38 +48,4 @@ class PlayerControlsContainer extends Component {
 	}
 }
 
-PlayerControlsContainer.propTypes = {
-	addToMainPot: PropTypes.func.isRequired,
-	pot: PropTypes.object
-};
-
-PlayerControlsContainer.defaultProps = {
-	pot: {
-		main: {
-			amount: 0,
-			players: [],
-			full: false
-		},
-		sidepotOne: {
-			amount: 0,
-			players: [],
-			full: false
-		},
-		sidepotTwo: {
-			amount: 0,
-			players: [],
-			full: false
-		},
-		sidepotThree: {
-			amount: 0,
-			players: [],
-			full: false
-		}
-	}
-};
-
-const mapStateToProps = state => ({
-	pot: state.pot
-});
-
-export default connect(mapStateToProps, {addToMainPot})(PlayerControlsContainer);
+export default PlayerControlsContainer;
