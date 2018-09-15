@@ -1,4 +1,8 @@
-import { CREATE_PLAYERS, DEAL_CARDS_TO_PLAYER } from '../actions/types';
+import {
+	CREATE_PLAYERS,
+	DEAL_CARDS_TO_PLAYER,
+	UPDATE_PLAYER_CASH
+} from '../actions/types';
 
 const initialState = {};
 
@@ -11,6 +15,11 @@ export default function(state = initialState, action) {
 		};
 	case DEAL_CARDS_TO_PLAYER:
 		console.log('runing DEAL_CARDS_TO_PLAYER');
+		return {
+			...state,
+			...action.payload
+		};
+	case UPDATE_PLAYER_CASH:
 		return {
 			...state,
 			...action.payload

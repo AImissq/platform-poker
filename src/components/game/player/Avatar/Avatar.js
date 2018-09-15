@@ -8,13 +8,12 @@ class Avatar extends Component {
 		super(props);
 		this.state = {
 			rank: 25,
-			cash: 25000,
 			lastAction: 'Fold'
 		};
 	}
 
 	addCommasToCash = cash => {
-		let cashAsString = this.state.cash.toString();
+		let cashAsString = this.props.cash.toString();
 		let cashArray = [];
 		for (let i = cashAsString.length; i > 0; i = i - 3) {
 			if(i === cashAsString.length) {
@@ -35,7 +34,7 @@ class Avatar extends Component {
 				rank={this.state.rank}
 			/>
 			<Text
-				content={this.addCommasToCash(this.state.cash)}
+				content={this.addCommasToCash(this.props.cash)}
 				textStyle='p'
 			/>
 			<Text

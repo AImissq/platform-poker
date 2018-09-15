@@ -1,4 +1,9 @@
-import { ADD_TO_MAIN_POT, ADD_TO_SIDEPOT_ONE, ADD_TO_SIDEPOT_TWO, ADD_TO_SIDEPOT_THREE } from './types';
+import {
+	ADD_TO_MAIN_POT,
+	ADD_TO_SIDEPOT_ONE,
+	ADD_TO_SIDEPOT_TWO,
+	ADD_TO_SIDEPOT_THREE
+} from './types';
 
 export const addToMainPot = (playerInfo, amountOfBet, potInfo) => dispatch => {
 	let foundPlayer = false;

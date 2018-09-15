@@ -34,6 +34,7 @@ class PlayerContainer extends Component {
 				}
 				<Avatar
 					features={this.props.avatar}
+					cash={this.props.cash}
 				/>
 				<Text
 					content={this.props.name}

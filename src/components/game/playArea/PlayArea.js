@@ -9,7 +9,7 @@ import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
-import { createPlayers, dealToPlayers } from '../../../actions/playersActions';
+import { createPlayers, dealToPlayers, updatePlayerCash } from '../../../actions/playersActions';
 import {
 	addToMainPot,
 	// addToSidepotOne,
@@ -25,7 +25,8 @@ const players = {
 		hand: null,
 		cash: 25000,
 		lastAction: '',
-		inThisHand: true
+		inThisHand: true,
+		whichPlayerAmI: 'playerTopRight'
 	},
 	playerTopLeft: {
 		name: '1',
@@ -34,7 +35,8 @@ const players = {
 		hand: null,
 		cash: 25000,
 		lastAction: '',
-		inThisHand: true
+		inThisHand: true,
+		whichPlayerAmI: 'playerTopLeft'
 	},
 	playerCenter: {
 		name: '2',
@@ -43,7 +45,8 @@ const players = {
 		hand: null,
 		cash: 25000,
 		lastAction: '',
-		inThisHand: true
+		inThisHand: true,
+		whichPlayerAmI: 'playerCenter'
 	},
 	playerBottomLeft: {
 		name: '3',
@@ -52,7 +55,8 @@ const players = {
 		hand: null,
 		cash: 25000,
 		lastAction: '',
-		inThisHand: true
+		inThisHand: true,
+		whichPlayerAmI: 'playerBottomLeft'
 	},
 	playerBottomRight: null,
 };
@@ -192,6 +196,9 @@ export class PlayArea extends Component {
 					playerInfo, this.state.currentBet, this.props.pot
 				);
 				// TODO: Update player's cash in redux
+				this.props.updatePlayerCash(
+					playerInfo, this.state.currentBet * -1
+				)
 				// TODO: Update player's last action to 'Call' in redux
 			}
 			else {
@@ -221,6 +228,9 @@ export class PlayArea extends Component {
 					currentBet: this.state.currentBet + this.state.minRaise
 				});
 				// TODO: Update player's cash in redux
+				this.props.updatePlayerCash(
+					playerInfo, (this.state.currentBet + this.state.minRaise ) * -1
+				)
 				// TODO: Update player's last action to 'Raise' in redux
 			}
 			else {
@@ -255,6 +265,7 @@ export class PlayArea extends Component {
 							name={this.props.players.playerTopRight.name}
 							playerNumber={this.props.players.playerTopRight.playerNumber}
 							type={this.props.players.playerTopRight.type}
+							cash={this.props.players.playerTopRight.cash}
 						/>
 						<PlayerControlsContainer 
 							playerInfo={this.props.players.playerTopRight}
@@ -273,6 +284,7 @@ export class PlayArea extends Component {
 							name={this.props.players.playerTopLeft.name}
 							playerNumber={this.props.players.playerTopLeft.playerNumber}
 							type={this.props.players.playerTopLeft.type}
+							cash={this.props.players.playerTopLeft.cash}
 						/>
 						<PlayerControlsContainer 
 							playerInfo={this.props.players.playerTopLeft}
@@ -291,6 +303,7 @@ export class PlayArea extends Component {
 							name={this.props.players.playerBottomLeft.name}
 							playerNumber={this.props.players.playerBottomLeft.playerNumber}
 							type={this.props.players.playerBottomLeft.type}
+							cash={this.props.players.playerBottomLeft.cash}
 						/>
 						<PlayerControlsContainer 
 							playerInfo={this.props.players.playerBottomLeft}
@@ -309,6 +322,7 @@ export class PlayArea extends Component {
 							name={this.props.players.playerBottomRight.name}
 							playerNumber={this.props.players.playerBottomRight.playerNumber}
 							type={this.props.players.playerBottomRight.type}
+							cash={this.props.players.playerBottomRight.cash}
 						/>
 						<PlayerControlsContainer 
 							playerInfo={this.props.players.playerBottomRight}
@@ -338,6 +352,7 @@ export class PlayArea extends Component {
 							name={this.props.players.playerCenter.name}
 							playerNumber={this.props.players.playerCenter.playerNumber}
 							type={this.props.players.playerCenter.type}
+							cash={this.props.players.playerCenter.cash}
 						/>
 						<PlayerControlsContainer 
 							playerInfo={this.props.players.playerCenter}
@@ -360,6 +375,7 @@ PlayArea.propTypes = {
 	dealToPlayers: PropTypes.func.isRequired,
 	createPlayers: PropTypes.func.isRequired,
 	addToMainPot: PropTypes.func.isRequired,
+	updatePlayerCash: PropTypes.func.isRequired,
 	pot: PropTypes.object
 };
 
@@ -396,4 +412,4 @@ const mapStateToProps = state => ({
 	pot: state.pot
 });
 
-export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToMainPot})(PlayArea);
+export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToMainPot, updatePlayerCash})(PlayArea);
