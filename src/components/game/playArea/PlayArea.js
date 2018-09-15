@@ -18,7 +18,8 @@ const players = {
 		type: 'npc',
 		hand: null,
 		cash: 25000,
-		lastAction: ''
+		lastAction: '',
+		inThisHand: true
 	},
 	playerTopLeft: {
 		name: '1',
@@ -26,7 +27,8 @@ const players = {
 		type: 'npc',
 		hand: null,
 		cash: 25000,
-		lastAction: ''
+		lastAction: '',
+		inThisHand: true
 	},
 	playerCenter: {
 		name: '2',
@@ -34,7 +36,8 @@ const players = {
 		type: 'me',
 		hand: null,
 		cash: 25000,
-		lastAction: ''
+		lastAction: '',
+		inThisHand: true
 	},
 	playerBottomLeft: {
 		name: '3',
@@ -42,7 +45,8 @@ const players = {
 		type: 'npc',
 		hand: null,
 		cash: 25000,
-		lastAction: ''
+		lastAction: '',
+		inThisHand: true
 	},
 	playerBottomRight: null,
 };
@@ -224,7 +228,9 @@ export class PlayArea extends Component {
 
 	resetPlayers = () => {
 		this.setState({
-			actionOnPlayer: 0
+			actionOnPlayer: 0,
+			minRaise: this.state.bigBlind,
+			currentBet: 0
 		});
 	}
 
