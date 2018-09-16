@@ -1,107 +1,57 @@
-import {
-	ADD_TO_MAIN_POT,
-	ADD_TO_SIDEPOT_ONE,
-	ADD_TO_SIDEPOT_TWO,
-	ADD_TO_SIDEPOT_THREE
-} from './types';
+import { ADD_TO_POT } from './types';
 
-export const addToMainPot = (playerInfo, amountOfBet, potInfo) => dispatch => {
-	let foundPlayer = false;
-	for (let i = 0; i < potInfo.main.players.length; i++) {
-		if (playerInfo.playerNumber === potInfo.main.players[i].playerInfo.playerNumber) {
-			foundPlayer = true;
-			potInfo.main.players[i].totalBet += amountOfBet;
-		}
+export const addToPot = (whoAmI, amountToAdd, potInfo) => dispatch => {
+	let allDone = false;
+	for (let i = 0; i < potInfo.length; i++) {
+		if(!potInfo[i].full && !allDone) {
+			// Adds the player to the group, if not already present
+			if(!potInfo[i].players.includes(whoAmI)) {
+				potInfo[i].players.push(whoAmI);
+			}
+
+			// Update the pot total
+			potInfo[i].total += amountToAdd;
+
+			// Stop the for loop
+			allDone = true;
+		}		
 	}
-
-	if(!foundPlayer) {
-		potInfo.main.players.push({
-			playerInfo,
-			totalBet: amountOfBet,
-			allIn: false
-		});
-	}
-
-	potInfo.main.total += amountOfBet;	
 
 	dispatch({
-		type: ADD_TO_MAIN_POT,
-		payload: {...potInfo.main}
+		type: ADD_TO_POT,
+		payload: potInfo
 	});
 };
 
-export const addToSidepotOne = (playerInfo, amountOfBet, potInfo) => dispatch => {
-	let foundPlayer = false;
-	for (let i = 0; i < potInfo.sidepotOne.players.length; i++) {
-		if (playerInfo.playerNumber === potInfo.sidepotOne.players[i].playerInfo.playerNumber) {
-			foundPlayer = true;
-			potInfo.sidepotOne.players[i].totalBet += amountOfBet;
-		}
-	}
+// export const addToMainPot = (playerInfo, amountOfBet, potInfo) => dispatch => {
+// 	let foundPlayer = false;
+// 	for (let i = 0; i < potInfo.main.players.length; i++) {
+// 		if (playerInfo.playerNumber === potInfo.main.players[i].playerInfo.playerNumber) {
+// 			// Calculate how the bet compares with previous bets and update the total
+// 			// const differenceBetweenAmounts = 
 
-	if(!foundPlayer) {
-		potInfo.sidepotOne.players.push({
-			playerInfo,
-			totalBet: amountOfBet,
-			allIn: false
-		});
-	}
+// 			// Update the player's total bet
+// 			foundPlayer = true;
+// 			potInfo.main.players[i].totalBet += amountOfBet;
+// 		}
+// 	}
 
-	potInfo.sidepotOne.total += amountOfBet;	
+// 	if(!foundPlayer) {
+// 		potInfo.main.players.push({
+// 			playerInfo,
+// 			thisSingleBet: amountOfBet,
+// 			thisRoundBet: amountOfBet,
+// 			totalBet: amountOfBet,
+// 			allIn: false
+// 		});
+// 	}
 
-	dispatch({
-		type: ADD_TO_SIDEPOT_ONE,
-		payload: {...potInfo.sidepotOne}
-	});
-};
+// 	// potInfo.main.total = potInfo.main.players.reduce({}, 0);
 
-export const addToSidepotTwo = (playerInfo, amountOfBet, potInfo) => dispatch => {
-	let foundPlayer = false;
-	for (let i = 0; i < potInfo.sidepotTwo.players.length; i++) {
-		if (playerInfo.playerNumber === potInfo.sidepotTwo.players[i].playerInfo.playerNumber) {
-			foundPlayer = true;
-			potInfo.sidepotTwo.players[i].totalBet += amountOfBet;
-		}
-	}
+// 	potInfo.main.total += amountOfBet;	
 
-	if(!foundPlayer) {
-		potInfo.sidepotTwo.players.push({
-			playerInfo,
-			totalBet: amountOfBet,
-			allIn: false
-		});
-	}
-
-	potInfo.sidepotTwo.total += amountOfBet;	
-
-	dispatch({
-		type: ADD_TO_SIDEPOT_TWO,
-		payload: {...potInfo.sidepotTwo}
-	});
-};
-
-export const addToSidepotThree = (playerInfo, amountOfBet, potInfo) => dispatch => {
-	let foundPlayer = false;
-	for (let i = 0; i < potInfo.sidepotThree.players.length; i++) {
-		if (playerInfo.playerNumber === potInfo.sidepotThree.players[i].playerInfo.playerNumber) {
-			foundPlayer = true;
-			potInfo.sidepotThree.players[i].totalBet += amountOfBet;
-		}
-	}
-
-	if(!foundPlayer) {
-		potInfo.sidepotThree.players.push({
-			playerInfo,
-			totalBet: amountOfBet,
-			allIn: false
-		});
-	}
-
-	potInfo.sidepotThree.total += amountOfBet;	
-
-	dispatch({
-		type: ADD_TO_SIDEPOT_THREE,
-		payload: {...potInfo.sidepotThree}
-	});
-};
-
+// 	dispatch({
+// 		type: ADD_TO_POT,
+// 		payload: {...potInfo.main}
+// 	});
+// };

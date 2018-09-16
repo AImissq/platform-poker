@@ -3,22 +3,34 @@ import { CREATE_PLAYERS, DEAL_CARDS_TO_PLAYER, UPDATE_PLAYER_CASH } from './type
 export const createPlayers = playerData => dispatch => {
 	dispatch({
 		type: CREATE_PLAYERS,
-		payload: {...playerData}
+		payload: [...playerData]
 	});
 };
 
-export const dealToPlayers = handData => dispatch => {
-	console.log('handData: ', handData);
+export const dealToPlayers = (players, hands) => dispatch => {
+	for (let i = 0; i < players.length; i++) {
+		players[i].hand = hands[i];
+	}
+
 	dispatch({
 		type: DEAL_CARDS_TO_PLAYER,
-		payload: {...handData}
+		payload: [...players]
 	});
 };
 
-export const updatePlayerCash = (playerInfo, amountToChange) => dispatch => {
-	playerInfo.cash = playerInfo.cash + amountToChange;
+export const updatePlayerCash = (players, whoAmI, amountToChange) => dispatch => {
+	for (let i = 0; i < players.length; i++) {
+		if(players[i].whichPlayerAmI === whoAmI) {
+			players[i].cash += amountToChange;
+		}
+	}
+
 	dispatch({
 		type: UPDATE_PLAYER_CASH,
-		payload: {[playerInfo.whichPlayerAmI]: {...playerInfo}}
+		payload: [...players]
 	});
 };
+
+
+
+

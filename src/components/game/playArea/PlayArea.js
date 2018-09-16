@@ -10,56 +10,46 @@ import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
 import { createPlayers, dealToPlayers, updatePlayerCash } from '../../../actions/playersActions';
-import {
-	addToMainPot,
-	// addToSidepotOne,
-	// addToSidepotTwo,
-	// addToSidepotThree
-} from '../../../actions/potActions';
+import { addToPot } from '../../../actions/potActions';
 
-const players = {
-	playerTopRight: {
-		name: '0',
+const players = [
+	{
+		name: 'Steve',
 		playerNumber: 0,
 		type: 'npc',
 		hand: null,
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
-		whichPlayerAmI: 'playerTopRight'
+		whichPlayerAmI: 'playerTopRight',
+		currentSingleBet: 0,
+		currentRoundOfBetting: 0
 	},
-	playerTopLeft: {
-		name: '1',
+	{
+		name: 'Kacy',
 		playerNumber: 1,
 		type: 'npc',
 		hand: null,
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
-		whichPlayerAmI: 'playerTopLeft'
+		whichPlayerAmI: 'playerTopLeft',
+		currentSingleBet: 0,
+		currentRoundOfBetting: 0
 	},
-	playerCenter: {
-		name: '2',
+	{
+		name: 'Ben',
 		playerNumber: 2,
-		type: 'me',
-		hand: null,
-		cash: 25000,
-		lastAction: '',
-		inThisHand: true,
-		whichPlayerAmI: 'playerCenter'
-	},
-	playerBottomLeft: {
-		name: '3',
-		playerNumber: 3,
 		type: 'npc',
 		hand: null,
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
-		whichPlayerAmI: 'playerBottomLeft'
-	},
-	playerBottomRight: null,
-};
+		whichPlayerAmI: 'playerCenter',
+		currentSingleBet: 0,
+		currentRoundOfBetting: 0
+	}
+];
 
 let deck;
 
@@ -69,7 +59,6 @@ export class PlayArea extends Component {
 		this.state = {
 			deck: [],
 			playing: false,
-			pot: 0,
 			smallBlind: 10,
 			bigBlind: 20,
 			minRaise: 20,
@@ -88,71 +77,10 @@ export class PlayArea extends Component {
 	}
 
 	async dealCardsToPlayers(deck) {
-		let tempState = {
-			playerTopRight: false,
-			playerTopLeft: false,
-			playerCenter: false,
-			playerBottomLeft: false,
-			playerBottomRight: false
-		};
-		let numPlayers = 0;
+		const hands = await deal(deck, this.props.players.length);
 
-		if(this.props.players.playerTopRight) { numPlayers++;}
-		if(this.props.players.playerTopLeft) { numPlayers++;}
-		if(this.props.players.playerCenter) { numPlayers++;}
-		if(this.props.players.playerBottomLeft) { numPlayers++;}
-		if(this.props.players.playerBottomRight) { numPlayers++;}
+		this.props.dealToPlayers(this.props.players, hands);
 
-		const hands = await deal(deck, numPlayers);
-
-		hands.map( hand => {
-			if(this.props.players.playerTopRight && !tempState.playerTopRight) {
-				this.props.dealToPlayers({
-					playerTopRight: {
-						...this.props.players.playerTopRight,
-						hand
-					}
-				});
-				tempState.playerTopRight = true;
-			}
-			else if(this.props.players.playerTopLeft && !tempState.playerTopLeft) {
-				this.props.dealToPlayers({
-					playerTopLeft: {
-						...this.props.players.playerTopLeft,
-						hand
-					}
-				});
-				tempState.playerTopLeft = true;
-			}
-			else if(this.props.players.playerCenter && !tempState.playerCenter) {
-				this.props.dealToPlayers({
-					playerCenter: {
-						...this.props.players.playerCenter,
-						hand
-					}
-				});
-				tempState.playerCenter = true;
-			}
-			else if(this.props.players.playerBottomLeft && !tempState.playerBottomLeft) {
-				this.props.dealToPlayers({
-					playerBottomLeft: {
-						...this.props.players.playerBottomLeft,
-						hand
-					}
-				});
-				tempState.playerBottomLeft = true;
-			}
-			else if(this.props.players.playerBottomRight && !tempState.playerBottomRight) {
-				this.props.dealToPlayers({
-					playerBottomRight: {
-						...this.props.players.playerBottomRight,
-						hand
-					}
-				});
-				tempState.playerBottomRight = true;
-			}
-			return null;
-		});
 		this.setState({
 			playing: true
 		});
@@ -160,7 +88,7 @@ export class PlayArea extends Component {
 
 	goToNextPlayer = () => {
 		let newActivePlayer = this.state.actionOnPlayer +1;
-		if(newActivePlayer > 3) {
+		if(newActivePlayer >= this.props.players.length) {
 			newActivePlayer = 0;
 		}
 		this.setState({
@@ -177,9 +105,12 @@ export class PlayArea extends Component {
 	playerChecks = playerInfo => {
 		console.log('CHECK for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
+			this.props.addToPot(
+				// whoAmI, amountToAdd, potInfo
+				playerInfo.whichPlayerAmI, 0, this.props.pot
+			);			
 			this.goToNextPlayer();
 			// TODO: Update player's last action to 'Check' in redux
-			this.goToNextPlayer();
 		}
 		else {
 		}
@@ -191,13 +122,14 @@ export class PlayArea extends Component {
 			console.log('player can bet');
 			if(playerInfo.cash >= this.state.currentBet) {
 				console.log('first if statement is met');
-				this.props.addToMainPot(
-					// playerInfo, amountOfBet, potInfo
-					playerInfo, this.state.currentBet, this.props.pot
+				this.props.addToPot(
+					// whoAmI, amountToAdd, potInfo
+					playerInfo.whichPlayerAmI, this.state.currentBet, this.props.pot
 				);
 				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
-					playerInfo, this.state.currentBet * -1
+					// players, whoAmI, amountToChange
+					this.props.players, playerInfo.whichPlayerAmI, this.state.currentBet * -1
 				)
 				// TODO: Update player's last action to 'Call' in redux
 			}
@@ -220,16 +152,16 @@ export class PlayArea extends Component {
 		console.log('RAISE for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			if(playerInfo.cash >= this.state.currentBet + this.state.minRaise) {
-				this.props.addToMainPot(
-					// playerInfo, amountOfBet, potInfo
-					playerInfo, this.state.currentBet + this.state.minRaise, this.props.pot
+				this.props.addToPot(
+					// whoAmI, amountToAdd, potInfo
+					playerInfo.whichPlayerAmI, this.state.currentBet + this.state.minRaise, this.props.pot
 				);
 				this.setState({
 					currentBet: this.state.currentBet + this.state.minRaise
 				});
 				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
-					playerInfo, (this.state.currentBet + this.state.minRaise ) * -1
+					this.props.players, playerInfo.whichPlayerAmI, (this.state.currentBet + this.state.minRaise) * -1
 				)
 				// TODO: Update player's last action to 'Raise' in redux
 			}
@@ -254,85 +186,53 @@ export class PlayArea extends Component {
 		});
 	}
 
+	drawOpponentDivs = () => {
+		const opponentDivs = this.props.players.map(player => {
+			return (<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
+				<PlayerContainer
+					cards={player.hand}
+					avatar={{}}
+					name={player.name}
+					playerNumber={player.playerNumber}
+					type={player.type}
+					cash={player.cash}
+				/>
+				<PlayerControlsContainer 
+					playerInfo={player}
+					checkAction = {this.playerChecks}
+					callAction = {this.playerCalls}
+					raiseAction = {this.playerRaises}
+				/>
+			</div>)
+		});
+		return opponentDivs;
+	}
+
 	render() {
+		const opponentDivs = (
+			this.props.players.map(player => {
+				(<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
+					<PlayerContainer
+						cards={player.hand}
+						avatar={{}}
+						name={player.name}
+						playerNumber={player.playerNumber}
+						type={player.type}
+						cash={player.cash}
+					/>
+					<PlayerControlsContainer 
+						playerInfo={player}
+						checkAction = {this.playerChecks}
+						callAction = {this.playerCalls}
+						raiseAction = {this.playerRaises}
+					/>
+				</div>)
+			})
+		);
+
 		return (
 			<div>
-				{this.props.players.playerTopRight ?
-					<div style={{float: 'left'}}>
-						<PlayerContainer
-							cards={this.props.players.playerTopRight.hand}
-							avatar={{}}
-							name={this.props.players.playerTopRight.name}
-							playerNumber={this.props.players.playerTopRight.playerNumber}
-							type={this.props.players.playerTopRight.type}
-							cash={this.props.players.playerTopRight.cash}
-						/>
-						<PlayerControlsContainer 
-							playerInfo={this.props.players.playerTopRight}
-							checkAction = {this.playerChecks}
-							callAction = {this.playerCalls}
-							raiseAction = {this.playerRaises}
-						/>
-					</div>
-					: null
-				}
-				{this.props.players.playerTopLeft ?
-					<div style={{float: 'left'}}>
-						<PlayerContainer
-							cards={this.props.players.playerTopLeft.hand}
-							avatar={{}}
-							name={this.props.players.playerTopLeft.name}
-							playerNumber={this.props.players.playerTopLeft.playerNumber}
-							type={this.props.players.playerTopLeft.type}
-							cash={this.props.players.playerTopLeft.cash}
-						/>
-						<PlayerControlsContainer 
-							playerInfo={this.props.players.playerTopLeft}
-							checkAction = {this.playerChecks}
-							callAction = {this.playerCalls}
-							raiseAction = {this.playerRaises}
-						/>
-					</div>
-					: null
-				}
-				{this.props.players.playerBottomLeft ?
-					<div style={{float: 'left'}}>
-						<PlayerContainer
-							cards={this.props.players.playerBottomLeft.hand}
-							avatar={{}}
-							name={this.props.players.playerBottomLeft.name}
-							playerNumber={this.props.players.playerBottomLeft.playerNumber}
-							type={this.props.players.playerBottomLeft.type}
-							cash={this.props.players.playerBottomLeft.cash}
-						/>
-						<PlayerControlsContainer 
-							playerInfo={this.props.players.playerBottomLeft}
-							checkAction = {this.playerChecks}
-							callAction = {this.playerCalls}
-							raiseAction = {this.playerRaises}
-						/>
-					</div>
-					: null
-				}
-				{this.props.players.playerBottomRight ?
-					<div style={{float: 'left'}}>
-						<PlayerContainer
-							cards={this.props.players.playerBottomRight.hand}
-							avatar={{}}
-							name={this.props.players.playerBottomRight.name}
-							playerNumber={this.props.players.playerBottomRight.playerNumber}
-							type={this.props.players.playerBottomRight.type}
-							cash={this.props.players.playerBottomRight.cash}
-						/>
-						<PlayerControlsContainer 
-							playerInfo={this.props.players.playerBottomRight}
-							checkAction = {this.playerChecks}
-							callAction = {this.playerCalls}
-							raiseAction = {this.playerRaises}
-						/>
-					</div>
-					: null
-				}
+				{this.drawOpponentDivs()}
 
 				{ this.state.playing ? <TableCardsContainer
 					deck={this.state.deck}
@@ -342,7 +242,13 @@ export class PlayArea extends Component {
 					: <div style={{width: '60%', margin: '0 auto'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
 				}
 
-				<div style={{fontSize: '2em', width: '80%', margin: '0 auto', marginTop: '20px'}}>Pot: <strong>${this.props.pot.main.total}</strong> | Action is on player <strong>{this.state.actionOnPlayer}</strong></div>
+				<div style={{fontSize: '2em', width: '800px', margin: '0 auto', marginTop: '20px'}}>
+					Pot: <strong>${this.props.pot[0].total}</strong>
+					{this.props.players[0]
+						? <span>| Action is on <strong>{this.props.players[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
+						: null
+					}
+				</div>
 
 				{this.props.players.playerCenter ?
 					<div style={{float: 'left'}}>
@@ -374,36 +280,22 @@ PlayArea.propTypes = {
 	tableCards: PropTypes.object.isRequired,
 	dealToPlayers: PropTypes.func.isRequired,
 	createPlayers: PropTypes.func.isRequired,
-	addToMainPot: PropTypes.func.isRequired,
+	addToPot: PropTypes.func.isRequired,
 	updatePlayerCash: PropTypes.func.isRequired,
-	pot: PropTypes.object
+	players: PropTypes.array,
+	pot: PropTypes.array
 };
 
 PlayArea.defaultProps = {
 	tableCards: {},
-	players: {},
-	pot: {
-		main: {
-			total: 0,
-			players: [],
-			full: false
-		},
-		sidepotOne: {
-			total: 0,
-			players: [],
-			full: false
-		},
-		sidepotTwo: {
-			total: 0,
-			players: [],
-			full: false
-		},
-		sidepotThree: {
+	players: [],
+	pot: [
+		{
 			total: 0,
 			players: [],
 			full: false
 		}
-	}
+	]
 };
 
 const mapStateToProps = state => ({
@@ -412,4 +304,4 @@ const mapStateToProps = state => ({
 	pot: state.pot
 });
 
-export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToMainPot, updatePlayerCash})(PlayArea);
+export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToPot, updatePlayerCash})(PlayArea);
