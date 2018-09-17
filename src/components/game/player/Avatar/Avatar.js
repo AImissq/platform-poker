@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import './Avatar.css';
 import Text from '../Text/Text';
 import Rank from '../Rank/Rank';
@@ -38,7 +40,7 @@ class Avatar extends Component {
 				textStyle='p'
 			/>
 			<Text
-				content={this.state.lastAction}
+				content={this.props.lastAction}
 				textStyle='p'
 			/>
 		</div>
@@ -46,4 +48,13 @@ class Avatar extends Component {
 	}
 }
 
-export default Avatar;
+Avatar.propTypes = {
+};
+
+Avatar.defaultProps = {
+};
+
+const mapStateToProps = state => ({
+});
+
+export default connect(mapStateToProps)(Avatar);

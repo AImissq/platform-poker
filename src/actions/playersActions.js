@@ -1,4 +1,4 @@
-import { CREATE_PLAYERS, DEAL_CARDS_TO_PLAYER, UPDATE_PLAYER_CASH } from './types';
+import { CREATE_PLAYERS, DEAL_CARDS_TO_PLAYER, UPDATE_PLAYER_CASH, UPDATE_PLAYER_ACTION_STATS } from './types';
 
 export const createPlayers = playerData => dispatch => {
 	dispatch({
@@ -31,6 +31,17 @@ export const updatePlayerCash = (players, whoAmI, amountToChange) => dispatch =>
 	});
 };
 
-
+export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => dispatch => {
+	for (let i = 0; i < players.length; i++) {
+		if(players[i].whichPlayerAmI === whoAmI) {
+			players[i].lastAction = action;
+			players[i].currentBet = currentBet;
+		}
+	}
+	dispatch({
+		type: UPDATE_PLAYER_ACTION_STATS,
+		payload: [...players]
+	});
+};
 
 

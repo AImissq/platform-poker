@@ -9,7 +9,7 @@ import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
-import { createPlayers, dealToPlayers, updatePlayerCash } from '../../../actions/playersActions';
+import { createPlayers, dealToPlayers, updatePlayerCash, updatePlayerActionStats } from '../../../actions/playersActions';
 import { addToPot } from '../../../actions/potActions';
 
 const players = [
@@ -23,7 +23,8 @@ const players = [
 		inThisHand: true,
 		whichPlayerAmI: 'playerTopRight',
 		currentSingleBet: 0,
-		currentRoundOfBetting: 0
+		currentRoundOfBetting: 0,
+		currentBet: 0
 	},
 	{
 		name: 'Kacy',
@@ -35,7 +36,8 @@ const players = [
 		inThisHand: true,
 		whichPlayerAmI: 'playerTopLeft',
 		currentSingleBet: 0,
-		currentRoundOfBetting: 0
+		currentRoundOfBetting: 0,
+		currentBet: 0
 	},
 	{
 		name: 'Ben',
@@ -47,7 +49,8 @@ const players = [
 		inThisHand: true,
 		whichPlayerAmI: 'playerCenter',
 		currentSingleBet: 0,
-		currentRoundOfBetting: 0
+		currentRoundOfBetting: 0,
+		currentBet: 0
 	}
 ];
 
@@ -108,7 +111,11 @@ export class PlayArea extends Component {
 			this.props.addToPot(
 				// whoAmI, amountToAdd, potInfo
 				playerInfo.whichPlayerAmI, 0, this.props.pot
-			);			
+			);
+			this.props.updatePlayerActionStats(
+				// players, whoAmI, action, currentBet
+				this.props.players, playerInfo.whichPlayerAmI, 'Check', 0
+			)
 			this.goToNextPlayer();
 			// TODO: Update player's last action to 'Check' in redux
 		}
@@ -122,16 +129,21 @@ export class PlayArea extends Component {
 			console.log('player can bet');
 			if(playerInfo.cash >= this.state.currentBet) {
 				console.log('first if statement is met');
+
 				this.props.addToPot(
 					// whoAmI, amountToAdd, potInfo
-					playerInfo.whichPlayerAmI, this.state.currentBet, this.props.pot
+					playerInfo.whichPlayerAmI, this.state.currentBet - playerInfo.currentBet, this.props.pot
 				);
 				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
 					// players, whoAmI, amountToChange
-					this.props.players, playerInfo.whichPlayerAmI, this.state.currentBet * -1
+					this.props.players, playerInfo.whichPlayerAmI, (this.state.currentBet - playerInfo.currentBet) * -1
 				)
 				// TODO: Update player's last action to 'Call' in redux
+				this.props.updatePlayerActionStats(
+					// players, whoAmI, action, currentBet
+					this.props.players, playerInfo.whichPlayerAmI, 'Call', this.state.currentBet
+				);
 			}
 			else {
 				console.log('else statement is met');
@@ -164,6 +176,10 @@ export class PlayArea extends Component {
 					this.props.players, playerInfo.whichPlayerAmI, (this.state.currentBet + this.state.minRaise) * -1
 				)
 				// TODO: Update player's last action to 'Raise' in redux
+				this.props.updatePlayerActionStats(
+					// players, whoAmI, action, currentBet
+					this.props.players, playerInfo.whichPlayerAmI, 'Raise', this.state.currentBet + this.state.minRaise
+				);
 			}
 			else {
 				this.setState({
@@ -196,6 +212,7 @@ export class PlayArea extends Component {
 					playerNumber={player.playerNumber}
 					type={player.type}
 					cash={player.cash}
+					lastAction={player.lastAction}
 				/>
 				<PlayerControlsContainer 
 					playerInfo={player}
@@ -209,27 +226,6 @@ export class PlayArea extends Component {
 	}
 
 	render() {
-		const opponentDivs = (
-			this.props.players.map(player => {
-				(<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
-					<PlayerContainer
-						cards={player.hand}
-						avatar={{}}
-						name={player.name}
-						playerNumber={player.playerNumber}
-						type={player.type}
-						cash={player.cash}
-					/>
-					<PlayerControlsContainer 
-						playerInfo={player}
-						checkAction = {this.playerChecks}
-						callAction = {this.playerCalls}
-						raiseAction = {this.playerRaises}
-					/>
-				</div>)
-			})
-		);
-
 		return (
 			<div>
 				{this.drawOpponentDivs()}
@@ -245,7 +241,7 @@ export class PlayArea extends Component {
 				<div style={{fontSize: '2em', width: '800px', margin: '0 auto', marginTop: '20px'}}>
 					Pot: <strong>${this.props.pot[0].total}</strong>
 					{this.props.players[0]
-						? <span>| Action is on <strong>{this.props.players[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
+						? <span> | Action is on <strong>{this.props.players[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
 						: null
 					}
 				</div>
@@ -282,6 +278,7 @@ PlayArea.propTypes = {
 	createPlayers: PropTypes.func.isRequired,
 	addToPot: PropTypes.func.isRequired,
 	updatePlayerCash: PropTypes.func.isRequired,
+	updatePlayerActionStats: PropTypes.func.isRequired,
 	players: PropTypes.array,
 	pot: PropTypes.array
 };
@@ -304,4 +301,4 @@ const mapStateToProps = state => ({
 	pot: state.pot
 });
 
-export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToPot, updatePlayerCash})(PlayArea);
+export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToPot, updatePlayerCash, updatePlayerActionStats})(PlayArea);
