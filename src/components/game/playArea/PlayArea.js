@@ -94,19 +94,25 @@ export class PlayArea extends Component {
 		if(newActivePlayer >= this.props.players.length) {
 			newActivePlayer = 0;
 		}
+		for (let i = 0; i < this.props.players.length; i++) {
+			if(this.props.players[i].playerNumber === newActivePlayer && this.props.players[i].lastAction !== '' && this.props.players[i].currentBet === this.state.currentBet) {
+				alert('Time to see more cards!');
+			}
+			
+		}
 		this.setState({
 			actionOnPlayer: newActivePlayer
 		});
 	}
 
 	canThisPlayerBet = playerInfo => {
-		console.log('checking if the player can bet: ', playerInfo.cash >= 0);
+		// console.log('checking if the player can bet: ', playerInfo.cash >= 0);
 		return (playerInfo.playerNumber === this.state.actionOnPlayer && playerInfo.cash >= 0);
 		// return playerInfo.cash >= 0 && playerInfo.lastAction !== 'Fold';
 	}
 
 	playerChecks = playerInfo => {
-		console.log('CHECK for player: ', playerInfo);
+		// console.log('CHECK for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			this.props.addToPot(
 				// whoAmI, amountToAdd, potInfo
@@ -124,11 +130,11 @@ export class PlayArea extends Component {
 	}
 
 	playerCalls = playerInfo => {
-		console.log('CALL for player: ', playerInfo);
+		// console.log('CALL for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
-			console.log('player can bet');
+			// console.log('player can bet');
 			if(playerInfo.cash >= this.state.currentBet) {
-				console.log('first if statement is met');
+				// console.log('first if statement is met');
 
 				this.props.addToPot(
 					// whoAmI, amountToAdd, potInfo
@@ -146,7 +152,7 @@ export class PlayArea extends Component {
 				);
 			}
 			else {
-				console.log('else statement is met');
+				// console.log('else statement is met');
 				this.setState({
 					pot: this.state.pot + playerInfo.cash
 				});
@@ -156,12 +162,12 @@ export class PlayArea extends Component {
 			this.goToNextPlayer();
 		}
 		else {
-			console.log('player CANNOT bet');
+			// console.log('player CANNOT bet');
 		}
 	}
 
 	playerRaises = playerInfo => {
-		console.log('RAISE for player: ', playerInfo);
+		// console.log('RAISE for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			if(playerInfo.cash >= this.state.currentBet + this.state.minRaise) {
 				this.props.addToPot(

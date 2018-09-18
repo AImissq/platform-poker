@@ -4,6 +4,7 @@ const initialState = [
 	{
 		total: 0,
 		players: [],
+		playerCanCheck: false,
 		full: false
 	}
 ];

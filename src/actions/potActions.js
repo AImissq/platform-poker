@@ -15,7 +15,11 @@ export const addToPot = (whoAmI, amountToAdd, potInfo) => dispatch => {
 			// Stop the for loop
 			allDone = true;
 		}		
+		if(amountToAdd > 0) {
+			potInfo[i].playerCanCheck = false;
+		}
 	}
+
 
 	dispatch({
 		type: ADD_TO_POT,
