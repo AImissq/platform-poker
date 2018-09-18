@@ -96,7 +96,7 @@ export class PlayArea extends Component {
 		}
 		for (let i = 0; i < this.props.players.length; i++) {
 			if(this.props.players[i].playerNumber === newActivePlayer && this.props.players[i].lastAction !== '' && this.props.players[i].currentBet === this.state.currentBet) {
-				alert('Time to see more cards!');
+				alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players[i].currentBet);
 			}
 			
 		}
@@ -169,23 +169,24 @@ export class PlayArea extends Component {
 	playerRaises = playerInfo => {
 		// console.log('RAISE for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
-			if(playerInfo.cash >= this.state.currentBet + this.state.minRaise) {
+			const newBet = this.state.currentBet + this.state.minRaise;
+			if(playerInfo.cash >= newBet) {
 				this.props.addToPot(
 					// whoAmI, amountToAdd, potInfo
-					playerInfo.whichPlayerAmI, this.state.currentBet + this.state.minRaise, this.props.pot
+					playerInfo.whichPlayerAmI, newBet, this.props.pot
 				);
-				this.setState({
-					currentBet: this.state.currentBet + this.state.minRaise
-				});
 				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
-					this.props.players, playerInfo.whichPlayerAmI, (this.state.currentBet + this.state.minRaise) * -1
+					this.props.players, playerInfo.whichPlayerAmI, (newBet - playerInfo.currentBet) * -1
 				)
 				// TODO: Update player's last action to 'Raise' in redux
 				this.props.updatePlayerActionStats(
 					// players, whoAmI, action, currentBet
-					this.props.players, playerInfo.whichPlayerAmI, 'Raise', this.state.currentBet + this.state.minRaise
+					this.props.players, playerInfo.whichPlayerAmI, 'Raise', newBet
 				);
+				this.setState({
+					currentBet: newBet
+				});
 			}
 			else {
 				this.setState({
