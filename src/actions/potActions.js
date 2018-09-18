@@ -20,7 +20,6 @@ export const addToPot = (whoAmI, amountToAdd, potInfo) => dispatch => {
 		}
 	}
 
-
 	dispatch({
 		type: ADD_TO_POT,
 		payload: potInfo

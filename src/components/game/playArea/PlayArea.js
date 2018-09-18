@@ -9,7 +9,7 @@ import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
-import { createPlayers, dealToPlayers, updatePlayerCash, updatePlayerActionStats } from '../../../actions/playersActions';
+import { createPlayers, dealToPlayers, updatePlayerCash, updatePlayerActionStats, resetPlayerCurrentBets } from '../../../actions/playersActions';
 import { addToPot } from '../../../actions/potActions';
 
 const players = [
@@ -207,6 +207,7 @@ export class PlayArea extends Component {
 			minRaise: this.state.bigBlind,
 			currentBet: 0
 		});
+		this.props.resetPlayerCurrentBets(this.props.players);
 	}
 
 	drawOpponentDivs = () => {
@@ -286,6 +287,7 @@ PlayArea.propTypes = {
 	addToPot: PropTypes.func.isRequired,
 	updatePlayerCash: PropTypes.func.isRequired,
 	updatePlayerActionStats: PropTypes.func.isRequired,
+	resetPlayerCurrentBets: PropTypes.func.isRequired,
 	players: PropTypes.array,
 	pot: PropTypes.array
 };
@@ -308,4 +310,12 @@ const mapStateToProps = state => ({
 	pot: state.pot
 });
 
-export default connect(mapStateToProps, {dealTableCards, createPlayers, dealToPlayers, addToPot, updatePlayerCash, updatePlayerActionStats})(PlayArea);
+export default connect(mapStateToProps, {
+	dealTableCards,
+	createPlayers,
+	dealToPlayers,
+	addToPot,
+	updatePlayerCash,
+	updatePlayerActionStats,
+	resetPlayerCurrentBets
+})(PlayArea);

@@ -1,4 +1,10 @@
-import { CREATE_PLAYERS, DEAL_CARDS_TO_PLAYER, UPDATE_PLAYER_CASH, UPDATE_PLAYER_ACTION_STATS } from './types';
+import {
+	CREATE_PLAYERS,
+	DEAL_CARDS_TO_PLAYER,
+	UPDATE_PLAYER_CASH,
+	UPDATE_PLAYER_ACTION_STATS,
+	RESET_PLAYER_CURRENT_BETS
+} from './types';
 
 export const createPlayers = playerData => dispatch => {
 	dispatch({
@@ -44,4 +50,16 @@ export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => 
 	});
 };
 
-
+export const resetPlayerCurrentBets = players => dispatch => {
+	for (let i = 0; i < players.length; i++) {
+		players[i] = {
+			...players[i],
+			currentBet: 0,
+			lastAction: ''
+		};
+	}
+	dispatch({
+		type: RESET_PLAYER_CURRENT_BETS,
+		payload: [...players]
+	});
+};
