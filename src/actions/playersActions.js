@@ -9,7 +9,10 @@ import {
 export const createPlayers = playerData => dispatch => {
 	dispatch({
 		type: CREATE_PLAYERS,
-		payload: [...playerData]
+		payload: {
+			loading: false,
+			details: [...playerData]
+		}
 	});
 };
 
@@ -20,7 +23,10 @@ export const dealToPlayers = (players, hands) => dispatch => {
 
 	dispatch({
 		type: DEAL_CARDS_TO_PLAYER,
-		payload: [...players]
+		payload: {
+			loading: false,
+			details: [...players]
+		}
 	});
 };
 
@@ -33,7 +39,10 @@ export const updatePlayerCash = (players, whoAmI, amountToChange) => dispatch =>
 
 	dispatch({
 		type: UPDATE_PLAYER_CASH,
-		payload: [...players]
+		payload: {
+			loading: false,
+			details: [...players]
+		}
 	});
 };
 
@@ -46,7 +55,10 @@ export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => 
 	}
 	dispatch({
 		type: UPDATE_PLAYER_ACTION_STATS,
-		payload: [...players]
+		payload: {
+			loading: false,
+			details: [...players]
+		}
 	});
 };
 
@@ -60,6 +72,9 @@ export const resetPlayerCurrentBets = players => dispatch => {
 	}
 	dispatch({
 		type: RESET_PLAYER_CURRENT_BETS,
-		payload: [...players]
+		payload: {
+			loading: false,
+			details: [...players]
+		}
 	});
 };
