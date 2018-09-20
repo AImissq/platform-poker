@@ -79,6 +79,10 @@ export class PlayArea extends Component {
 		});
 	}
 
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		this.checkIfBettingRoundIsOver();
+	}
+
 	async dealCardsToPlayers(deck) {
 		const hands = await deal(deck, this.props.players.details.length);
 
@@ -89,16 +93,19 @@ export class PlayArea extends Component {
 		});
 	}
 
+	checkIfBettingRoundIsOver = () => {
+		for (let i = 0; i < this.props.players.details.length; i++) {
+			if(this.props.players.details[i].playerNumber === this.state.actionOnPlayer && this.props.players.details[i].lastAction !== '' && this.props.players.details[i].currentBet === this.state.currentBet) {
+				alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players.details[i].currentBet);
+			}
+			
+		}
+	}
+
 	goToNextPlayer = () => {
 		let newActivePlayer = this.state.actionOnPlayer +1;
 		if(newActivePlayer >= this.props.players.details.length) {
 			newActivePlayer = 0;
-		}
-		for (let i = 0; i < this.props.players.details.length; i++) {
-			if(this.props.players.details[i].playerNumber === newActivePlayer && this.props.players.details[i].lastAction !== '' && this.props.players.details[i].currentBet === this.state.currentBet) {
-				alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players.details[i].currentBet);
-			}
-			
 		}
 		this.setState({
 			actionOnPlayer: newActivePlayer
