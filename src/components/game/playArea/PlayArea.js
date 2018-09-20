@@ -180,7 +180,7 @@ export class PlayArea extends Component {
 			if(playerInfo.cash >= newBet) {
 				this.props.addToPot(
 					// whoAmI, amountToAdd, potInfo
-					playerInfo.whichPlayerAmI, newBet, this.props.pot.details
+					playerInfo.whichPlayerAmI, newBet - playerInfo.currentBet, this.props.pot.details
 				);
 				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
