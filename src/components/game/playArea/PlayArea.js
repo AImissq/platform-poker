@@ -96,8 +96,11 @@ export class PlayArea extends Component {
 
 	checkIfBettingRoundIsOver = () => {
 		for (let i = 0; i < this.props.players.details.length; i++) {
+			console.log('inside the for loop');
 			if(this.props.players.details[i].playerNumber === this.state.actionOnPlayer && this.props.players.details[i].lastAction !== '' && this.props.players.details[i].currentBet === this.state.currentBet) {
+				console.log('first if statement');
 				if(!this.props.tableCardStatus.flopIsVisible) {
+					console.log('calling the flop');
 					this.props.showFlopCards();
 					this.resetPlayers();
 				}
@@ -109,9 +112,7 @@ export class PlayArea extends Component {
 					this.props.showRiverCard();
 					this.resetPlayers();
 				}
-				// alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players.details[i].currentBet);
 			}
-			
 		}
 	}
 
@@ -128,7 +129,6 @@ export class PlayArea extends Component {
 	canThisPlayerBet = playerInfo => {
 		// console.log('checking if the player can bet: ', playerInfo.cash >= 0);
 		return (playerInfo.playerNumber === this.state.actionOnPlayer && playerInfo.cash >= 0);
-		// return playerInfo.cash >= 0 && playerInfo.lastAction !== 'Fold';
 	}
 
 	playerChecks = playerInfo => {
@@ -143,9 +143,6 @@ export class PlayArea extends Component {
 				this.props.players.details, playerInfo.whichPlayerAmI, 'Check', 0
 			)
 			this.goToNextPlayer();
-			// TODO: Update player's last action to 'Check' in redux
-		}
-		else {
 		}
 	}
 
@@ -160,12 +157,10 @@ export class PlayArea extends Component {
 					// whoAmI, amountToAdd, potInfo
 					playerInfo.whichPlayerAmI, this.state.currentBet - playerInfo.currentBet, this.props.pot.details
 				);
-				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
 					// players, whoAmI, amountToChange
 					this.props.players.details, playerInfo.whichPlayerAmI, (this.state.currentBet - playerInfo.currentBet) * -1
 				)
-				// TODO: Update player's last action to 'Call' in redux
 				this.props.updatePlayerActionStats(
 					// players, whoAmI, action, currentBet
 					this.props.players.details, playerInfo.whichPlayerAmI, 'Call', this.state.currentBet
@@ -195,11 +190,9 @@ export class PlayArea extends Component {
 					// whoAmI, amountToAdd, potInfo
 					playerInfo.whichPlayerAmI, newBet - playerInfo.currentBet, this.props.pot.details
 				);
-				// TODO: Update player's cash in redux
 				this.props.updatePlayerCash(
 					this.props.players.details, playerInfo.whichPlayerAmI, (newBet - playerInfo.currentBet) * -1
 				)
-				// TODO: Update player's last action to 'Raise' in redux
 				this.props.updatePlayerActionStats(
 					// players, whoAmI, action, currentBet
 					this.props.players.details, playerInfo.whichPlayerAmI, 'Raise', newBet
@@ -231,6 +224,14 @@ export class PlayArea extends Component {
 	}
 
 	drawOpponentDivs = () => {
+		let checkOrCall = 'check';
+		for (let j = 0; j < this.props.players.details.length; j++) {
+			if(this.props.players.details[j].lastAction === 'Call' || this.props.players.details[j].lastAction === 'Raise') {
+				checkOrCall = 'call';
+				j = this.props.players.details.length;
+			}
+		}
+
 		const opponentDivs = this.props.players.details.map(player => {
 			return (<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
 				<PlayerContainer
@@ -242,12 +243,15 @@ export class PlayArea extends Component {
 					cash={player.cash}
 					lastAction={player.lastAction}
 				/>
-				<PlayerControlsContainer 
-					playerInfo={player}
-					checkAction = {this.playerChecks}
-					callAction = {this.playerCalls}
-					raiseAction = {this.playerRaises}
-				/>
+				{this.state.actionOnPlayer === player.playerNumber ?
+					(<PlayerControlsContainer 
+						playerInfo={player}
+						checkOrCall={checkOrCall}
+						checkAction = {this.playerChecks}
+						callAction = {this.playerCalls}
+						raiseAction = {this.playerRaises}
+					/>
+				) : null}
 			</div>)
 		});
 		return opponentDivs;
@@ -258,6 +262,14 @@ export class PlayArea extends Component {
 			<div>
 				{this.drawOpponentDivs()}
 
+				<div style={{fontSize: '2em', width: '800px', margin: '0 auto', marginBottom: '20px'}}>
+					Pot: <strong>${this.props.pot.details[0].total}</strong>
+					{this.props.players.details[0]
+						? <span> | Action is on <strong>{this.props.players.details[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
+						: null
+					}
+				</div>
+
 				{ this.state.playing ? <TableCardsContainer
 					deck={this.state.deck}
 					tableCards={this.props.tableCards}
@@ -265,14 +277,6 @@ export class PlayArea extends Component {
 				/>
 					: <div style={{width: '60%', margin: '0 auto'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
 				}
-
-				<div style={{fontSize: '2em', width: '800px', margin: '0 auto', marginTop: '20px'}}>
-					Pot: <strong>${this.props.pot.details[0].total}</strong>
-					{this.props.players.details[0]
-						? <span> | Action is on <strong>{this.props.players.details[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
-						: null
-					}
-				</div>
 
 				{this.props.players.details.playerCenter ?
 					<div style={{float: 'left'}}>

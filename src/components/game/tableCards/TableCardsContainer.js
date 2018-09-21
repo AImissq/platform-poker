@@ -36,21 +36,12 @@ export class TableCardsContainer extends Component {
 	render() {
 		const wellStyles = { maxWidth: 400, minWidth: 200, margin: '0 auto 10px', float: 'left' };
 
-		const buttonsInstance = (
-			<div className="well" style={wellStyles}>
-				{!this.props.flopIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheFlop}>Show the flop</Button> : null }
-				{this.props.flopIsVisible && !this.props.turnIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheTurn}>Show the turn</Button> : null}
-				{this.props.flopIsVisible && this.props.turnIsVisible && !this.props.riverIsVisible ? <Button bsStyle="primary" bsSize="large" block onClick={this.showTheRiver}>Show the river</Button> : null}
-			</div>
-		);
-
 		const flopCards = this.props.flopIsVisible ? this.props.tableCards.flop : null;
 		const turnCard = this.props.turnIsVisible ? this.props.tableCards.turn : null;
 		const riverCard = this.props.riverIsVisible ? this.props.tableCards.river : null;
 
 		return (
 			<div className='TableCardsContainer'>
-				{buttonsInstance}
 				<RiverContainer className='dealtCardsContainer' card={riverCard} />
 				<TurnContainer className='dealtCardsContainer' card={turnCard} />
 				<FlopContainer className='dealtCardsContainer' cards={flopCards} />
