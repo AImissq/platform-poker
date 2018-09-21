@@ -1,4 +1,4 @@
-import { SHOW_FLOP_CARDS, SHOW_TURN_CARDS, SHOW_RIVER_CARD } from '../actions/types';
+import { RESET_TABLE_CARD_STATUS_TO_DEFAULT, SHOW_FLOP_CARDS, SHOW_TURN_CARDS, SHOW_RIVER_CARD } from '../actions/types';
 
 const initialState = {
 	flopIsVisible: false,
@@ -8,6 +8,8 @@ const initialState = {
 
 export default function(state = initialState, action) {
 	switch(action.type) {
+	case RESET_TABLE_CARD_STATUS_TO_DEFAULT:
+		return {...action.payload};
 	case SHOW_FLOP_CARDS:
 		return {
 			...state,

@@ -9,6 +9,7 @@ import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
+import { showFlopCards, showTurnCard, showRiverCard } from '../../../actions/tableCardStatusActions';
 import { createPlayers, dealToPlayers, updatePlayerCash, updatePlayerActionStats, resetPlayerCurrentBets } from '../../../actions/playersActions';
 import { addToPot } from '../../../actions/potActions';
 
@@ -96,7 +97,19 @@ export class PlayArea extends Component {
 	checkIfBettingRoundIsOver = () => {
 		for (let i = 0; i < this.props.players.details.length; i++) {
 			if(this.props.players.details[i].playerNumber === this.state.actionOnPlayer && this.props.players.details[i].lastAction !== '' && this.props.players.details[i].currentBet === this.state.currentBet) {
-				alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players.details[i].currentBet);
+				if(!this.props.tableCardStatus.flopIsVisible) {
+					this.props.showFlopCards();
+					this.resetPlayers();
+				}
+				else if(this.props.tableCardStatus.flopIsVisible && !this.props.tableCardStatus.turnIsVisible) {
+					this.props.showTurnCard();
+					this.resetPlayers();
+				}
+				else if(this.props.tableCardStatus.flopIsVisible && this.props.tableCardStatus.turnIsVisible && !this.props.tableCardStatus.riverIsVisible) {
+					this.props.showRiverCard();
+					this.resetPlayers();
+				}
+				// alert('Time to see more cards! The bet is ' + this.state.currentBet + ', and you have bet ' + this.props.players.details[i].currentBet);
 			}
 			
 		}
@@ -288,18 +301,23 @@ export class PlayArea extends Component {
 
 PlayArea.propTypes = {
 	dealTableCards: PropTypes.func.isRequired,
-	tableCards: PropTypes.object.isRequired,
 	dealToPlayers: PropTypes.func.isRequired,
 	createPlayers: PropTypes.func.isRequired,
 	addToPot: PropTypes.func.isRequired,
 	updatePlayerCash: PropTypes.func.isRequired,
 	updatePlayerActionStats: PropTypes.func.isRequired,
 	resetPlayerCurrentBets: PropTypes.func.isRequired,
-	players: PropTypes.array,
-	pot: PropTypes.array
+	showFlopCards: PropTypes.func.isRequired,
+	showTurnCard: PropTypes.func.isRequired,
+	showRiverCard: PropTypes.func.isRequired,
+	tableCardStatus: PropTypes.object,
+	tableCards: PropTypes.object,
+	players: PropTypes.object,
+	pot: PropTypes.object
 };
 
 PlayArea.defaultProps = {
+	tableCardStatus: {},
 	tableCards: {},
 	players: {
 		loading: false,
@@ -316,6 +334,7 @@ PlayArea.defaultProps = {
 };
 
 const mapStateToProps = state => ({
+	tableCardStatus: state.tableCardStatus,
 	tableCards: state.tableCards,
 	players: state.players,
 	pot: state.pot
@@ -328,5 +347,8 @@ export default connect(mapStateToProps, {
 	addToPot,
 	updatePlayerCash,
 	updatePlayerActionStats,
-	resetPlayerCurrentBets
+	resetPlayerCurrentBets,
+	showFlopCards,
+	showTurnCard,
+	showRiverCard
 })(PlayArea);

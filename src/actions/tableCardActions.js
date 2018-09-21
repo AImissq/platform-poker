@@ -1,5 +1,16 @@
-import { DEAL_TABLE_CARDS } from './types';
+import { RESET_TABLE_CARDS_TO_DEFAULT, DEAL_TABLE_CARDS } from './types';
 import { flop, turn, river } from '../utils';
+
+export const resetTableCardsToDefault = () => dispatch => {
+	dispatch({
+		type: RESET_TABLE_CARDS_TO_DEFAULT,
+		payload: {
+			flop: [],
+			turn: [],
+			river: []
+		}
+	});
+};
 
 export const dealTableCards = deck => dispatch => {
 	const tableCards = {

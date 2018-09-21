@@ -1,4 +1,14 @@
-import { ADD_TO_POT } from './types';
+import { RESET_POT_TO_DEFAULT, ADD_TO_POT } from './types';
+
+export const resetPotToDefault = () => dispatch => {
+	dispatch({
+		type: RESET_POT_TO_DEFAULT,
+		payload: {
+			loading: false,
+			details: []
+		}
+	});
+};
 
 export const addToPot = (whoAmI, amountToAdd, potInfo) => dispatch => {
 	let allDone = false;

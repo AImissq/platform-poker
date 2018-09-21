@@ -1,4 +1,15 @@
-import { SHOW_FLOP_CARDS, SHOW_TURN_CARDS, SHOW_RIVER_CARD } from './types';
+import { RESET_TABLE_CARD_STATUS_TO_DEFAULT, SHOW_FLOP_CARDS, SHOW_TURN_CARDS, SHOW_RIVER_CARD } from './types';
+
+export const resetTableCardStatusToDefault = () => dispatch => {
+	dispatch({
+		type: RESET_TABLE_CARD_STATUS_TO_DEFAULT,
+		payload: {
+			flopIsVisible: false,
+			turnIsVisible: false,
+			riverIsVisible: false
+		}
+	});
+};
 
 export const showFlopCards = () => dispatch => {
 	dispatch({

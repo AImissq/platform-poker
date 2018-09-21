@@ -1,4 +1,5 @@
 import {
+	RESET_PLAYERS_TO_DEFAULT,
 	CREATE_PLAYERS,
 	DEAL_CARDS_TO_PLAYER,
 	UPDATE_PLAYER_CASH,
@@ -13,6 +14,8 @@ const initialState = {
 
 export default function(state = initialState, action) {
 	switch(action.type) {
+	case RESET_PLAYERS_TO_DEFAULT:
+		return {...action.payload};
 	case CREATE_PLAYERS:
 		return {...action.payload};
 	case DEAL_CARDS_TO_PLAYER:

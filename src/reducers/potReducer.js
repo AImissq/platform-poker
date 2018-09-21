@@ -1,4 +1,4 @@
-import { ADD_TO_POT  } from '../actions/types';
+import { RESET_POT_TO_DEFAULT, ADD_TO_POT  } from '../actions/types';
 
 const initialState = {
 	loading: false,
@@ -12,6 +12,8 @@ const initialState = {
 
 export default function(state = initialState, action) {
 	switch(action.type) {
+	case RESET_POT_TO_DEFAULT:
+		return {...action.payload};
 	case ADD_TO_POT:
 		return {...action.payload};
 	default:

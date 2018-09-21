@@ -1,10 +1,21 @@
 import {
+	RESET_PLAYERS_TO_DEFAULT,
 	CREATE_PLAYERS,
 	DEAL_CARDS_TO_PLAYER,
 	UPDATE_PLAYER_CASH,
 	UPDATE_PLAYER_ACTION_STATS,
 	RESET_PLAYER_CURRENT_BETS
 } from './types';
+
+export const resetPlayersToDefault = () => dispatch => {
+	dispatch({
+		type: RESET_PLAYERS_TO_DEFAULT,
+		payload: {
+			loading: false,
+			details: []
+		}
+	});
+};
 
 export const createPlayers = playerData => dispatch => {
 	dispatch({
