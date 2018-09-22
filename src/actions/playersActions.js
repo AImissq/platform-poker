@@ -62,8 +62,12 @@ export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => 
 		if(players[i].whichPlayerAmI === whoAmI) {
 			players[i].lastAction = action;
 			players[i].currentBet = currentBet;
+			if(action === 'Fold') {
+				players[i].inThisHand = false;
+			}
 		}
 	}
+
 	dispatch({
 		type: UPDATE_PLAYER_ACTION_STATS,
 		payload: {
@@ -75,11 +79,13 @@ export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => 
 
 export const resetPlayerCurrentBets = players => dispatch => {
 	for (let i = 0; i < players.length; i++) {
-		players[i] = {
-			...players[i],
-			currentBet: 0,
-			lastAction: ''
-		};
+		if(players[i].inThisHand){
+			players[i] = {
+				...players[i],
+				currentBet: 0,
+				lastAction: ''
+			};
+		}
 	}
 	dispatch({
 		type: RESET_PLAYER_CURRENT_BETS,

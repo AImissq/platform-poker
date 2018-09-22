@@ -7,6 +7,7 @@ import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
 import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import { createDeck, deal } from '../../../utils';
+import './PlayArea.css';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
 import { showFlopCards, showTurnCard, showRiverCard } from '../../../actions/tableCardStatusActions';
@@ -67,7 +68,8 @@ export class PlayArea extends Component {
 			bigBlind: 20,
 			minRaise: 20,
 			currentBet: 0,
-			actionOnPlayer: 0
+			actionOnPlayer: 0,
+			gameOver: false
 		};
 	}
 
@@ -112,15 +114,29 @@ export class PlayArea extends Component {
 					this.props.showRiverCard();
 					this.resetPlayers();
 				}
+				else if(this.props.tableCardStatus.flopIsVisible && this.props.tableCardStatus.turnIsVisible && this.props.tableCardStatus.riverIsVisible && !this.state.gameOver) {
+					this.setState({
+						gameOver: true
+					})
+				}
 			}
 		}
 	}
 
-	goToNextPlayer = () => {
-		let newActivePlayer = this.state.actionOnPlayer +1;
+	goToNextPlayer = (newActivePlayer = this.state.actionOnPlayer + 1) => {
 		if(newActivePlayer >= this.props.players.details.length) {
 			newActivePlayer = 0;
 		}
+
+		for (let i = 0; i < this.props.players.details.length; i++) {
+			if(!this.props.players.details[newActivePlayer].inThisHand) {
+				newActivePlayer++
+				if(newActivePlayer >= this.props.players.details.length) {
+					newActivePlayer = 0;
+				}
+			}			
+		}
+
 		this.setState({
 			actionOnPlayer: newActivePlayer
 		});
@@ -128,7 +144,7 @@ export class PlayArea extends Component {
 
 	canThisPlayerBet = playerInfo => {
 		// console.log('checking if the player can bet: ', playerInfo.cash >= 0);
-		return (playerInfo.playerNumber === this.state.actionOnPlayer && playerInfo.cash >= 0);
+		return (playerInfo.inThisHand && playerInfo.playerNumber === this.state.actionOnPlayer && playerInfo.cash >= 0);
 	}
 
 	playerChecks = playerInfo => {
@@ -214,6 +230,17 @@ export class PlayArea extends Component {
 		}
 	}
 
+	playerFolds = playerInfo => {
+		// console.log('FOLD for player: ', playerInfo);
+		if(this.canThisPlayerBet(playerInfo)) {
+			this.props.updatePlayerActionStats(
+				// players, whoAmI, action, currentBet
+				this.props.players.details, playerInfo.whichPlayerAmI, 'Fold', 0
+			)
+			this.goToNextPlayer();
+		}
+	}
+
 	resetPlayers = () => {
 		this.setState({
 			actionOnPlayer: 0,
@@ -221,6 +248,9 @@ export class PlayArea extends Component {
 			currentBet: 0
 		});
 		this.props.resetPlayerCurrentBets(this.props.players.details);
+		if(!this.props.players.details[0].inThisHand) {
+			this.goToNextPlayer(0);
+		}
 	}
 
 	drawOpponentDivs = () => {
@@ -235,7 +265,7 @@ export class PlayArea extends Component {
 		const opponentDivs = this.props.players.details.map(player => {
 			return (<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
 				<PlayerContainer
-					cards={player.hand}
+					cards={player.inThisHand ? player.hand : null}
 					avatar={{}}
 					name={player.name}
 					playerNumber={player.playerNumber}
@@ -243,15 +273,16 @@ export class PlayArea extends Component {
 					cash={player.cash}
 					lastAction={player.lastAction}
 				/>
-				{this.state.actionOnPlayer === player.playerNumber ?
+				{!this.state.gameOver && this.state.actionOnPlayer === player.playerNumber ?
 					(<PlayerControlsContainer 
 						playerInfo={player}
 						checkOrCall={checkOrCall}
 						checkAction = {this.playerChecks}
 						callAction = {this.playerCalls}
 						raiseAction = {this.playerRaises}
+						foldAction = {this.playerFolds}
 					/>
-				) : null}
+				) : (<div style={{float: 'left', width: 125, minWidth: '125px', margin: '0 auto 10px'}}> </div>)}
 			</div>)
 		});
 		return opponentDivs;
@@ -275,7 +306,7 @@ export class PlayArea extends Component {
 					tableCards={this.props.tableCards}
 					resetPlayers={this.resetPlayers}
 				/>
-					: <div style={{width: '60%', margin: '0 auto'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
+					: <div style={{width: '60%', margin: '0 auto', display: 'table'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
 				}
 
 				{this.props.players.details.playerCenter ?

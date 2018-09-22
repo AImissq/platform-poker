@@ -17,6 +17,10 @@ class PlayerControlsContainer extends Component {
 		this.props.raiseAction(this.props.playerInfo);
 	}
 
+	handleFold = () => {
+		this.props.foldAction(this.props.playerInfo);
+	}
+
 	render() {
 		const wellStyles = { maxWidth: 125, margin: '0 auto 10px' };
 
@@ -34,7 +38,7 @@ class PlayerControlsContainer extends Component {
 				<Button bsStyle="success" bsSize="large" block onClick={this.handleRaise}>
 					Raise
 				</Button>
-				<Button bsStyle="danger" bsSize="large" block>
+				<Button bsStyle="danger" bsSize="large" block onClick={this.handleFold}>
 					Fold
 				</Button>
 			</div>

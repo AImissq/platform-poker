@@ -1,0 +1,7 @@
+.playarea_potarea {
+    display: table;
+}
+
+.playarea_potarea::before {
+    content: "\A";
+}
