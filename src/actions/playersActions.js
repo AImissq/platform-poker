@@ -29,7 +29,7 @@ export const createPlayers = playerData => dispatch => {
 
 export const dealToPlayers = (players, hands) => dispatch => {
 	for (let i = 0; i < players.length; i++) {
-		players[i].hand = hands[i];
+		players[i].hand.cards = hands[i];
 	}
 
 	dispatch({

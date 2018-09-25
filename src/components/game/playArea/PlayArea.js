@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 import PlayerContainer from '../player/Container/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
 import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
-import { createDeck, deal } from '../../../utils';
+import { createDeck, deal, determineHand } from '../../../utils';
 import './PlayArea.css';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
@@ -19,7 +19,9 @@ const players = [
 		name: 'Steve',
 		playerNumber: 0,
 		type: 'npc',
-		hand: null,
+		hand: {
+			cards: null
+		},
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
@@ -32,7 +34,9 @@ const players = [
 		name: 'Kacy',
 		playerNumber: 1,
 		type: 'npc',
-		hand: null,
+		hand: {
+			cards: null
+		},
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
@@ -45,7 +49,9 @@ const players = [
 		name: 'Ben',
 		playerNumber: 2,
 		type: 'npc',
-		hand: null,
+		hand: {
+			cards: null
+		},
 		cash: 25000,
 		lastAction: '',
 		inThisHand: true,
@@ -69,7 +75,21 @@ export class PlayArea extends Component {
 			minRaise: 20,
 			currentBet: 0,
 			actionOnPlayer: 0,
-			gameOver: false
+			gameOver: false,
+			results: [
+				{
+					name: players[0].name,
+					results: null
+				},
+				{
+					name: players[1].name,
+					results: null
+				},
+				{
+					name: players[2].name,
+					results: null
+				}
+			]
 		};
 	}
 
@@ -98,11 +118,8 @@ export class PlayArea extends Component {
 
 	checkIfBettingRoundIsOver = () => {
 		for (let i = 0; i < this.props.players.details.length; i++) {
-			console.log('inside the for loop');
 			if(this.props.players.details[i].playerNumber === this.state.actionOnPlayer && this.props.players.details[i].lastAction !== '' && this.props.players.details[i].currentBet === this.state.currentBet) {
-				console.log('first if statement');
 				if(!this.props.tableCardStatus.flopIsVisible) {
-					console.log('calling the flop');
 					this.props.showFlopCards();
 					this.resetPlayers();
 				}
@@ -117,10 +134,23 @@ export class PlayArea extends Component {
 				else if(this.props.tableCardStatus.flopIsVisible && this.props.tableCardStatus.turnIsVisible && this.props.tableCardStatus.riverIsVisible && !this.state.gameOver) {
 					this.setState({
 						gameOver: true
-					})
+					});
+					this.determinePlayersHands(this.props.players.details);
 				}
 			}
 		}
+	}
+
+	determinePlayersHands = players => {
+		console.log(players.map( player => {
+			if(player.inThisHand){
+				const cardPool = {
+					cards: [...this.props.tableCards.flop, ...this.props.tableCards.turn, ...this.props.tableCards.river, ...player.hand.cards]
+				};
+				return determineHand(cardPool);
+			}
+			else return null;
+		}));
 	}
 
 	goToNextPlayer = (newActivePlayer = this.state.actionOnPlayer + 1) => {
@@ -143,12 +173,10 @@ export class PlayArea extends Component {
 	}
 
 	canThisPlayerBet = playerInfo => {
-		// console.log('checking if the player can bet: ', playerInfo.cash >= 0);
 		return (playerInfo.inThisHand && playerInfo.playerNumber === this.state.actionOnPlayer && playerInfo.cash >= 0);
 	}
 
 	playerChecks = playerInfo => {
-		// console.log('CHECK for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			this.props.addToPot(
 				// whoAmI, amountToAdd, potInfo
@@ -163,11 +191,8 @@ export class PlayArea extends Component {
 	}
 
 	playerCalls = playerInfo => {
-		// console.log('CALL for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
-			// console.log('player can bet');
 			if(playerInfo.cash >= this.state.currentBet) {
-				// console.log('first if statement is met');
 
 				this.props.addToPot(
 					// whoAmI, amountToAdd, potInfo
@@ -183,7 +208,6 @@ export class PlayArea extends Component {
 				);
 			}
 			else {
-				// console.log('else statement is met');
 				this.setState({
 					pot: this.state.pot + playerInfo.cash
 				});
@@ -193,12 +217,11 @@ export class PlayArea extends Component {
 			this.goToNextPlayer();
 		}
 		else {
-			// console.log('player CANNOT bet');
+			// player cannot bet
 		}
 	}
 
 	playerRaises = playerInfo => {
-		// console.log('RAISE for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			const newBet = this.state.currentBet + this.state.minRaise;
 			if(playerInfo.cash >= newBet) {
@@ -231,7 +254,6 @@ export class PlayArea extends Component {
 	}
 
 	playerFolds = playerInfo => {
-		// console.log('FOLD for player: ', playerInfo);
 		if(this.canThisPlayerBet(playerInfo)) {
 			this.props.updatePlayerActionStats(
 				// players, whoAmI, action, currentBet
@@ -265,7 +287,7 @@ export class PlayArea extends Component {
 		const opponentDivs = this.props.players.details.map(player => {
 			return (<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
 				<PlayerContainer
-					cards={player.inThisHand ? player.hand : null}
+					cards={player.inThisHand ? player.hand.cards : null}
 					avatar={{}}
 					name={player.name}
 					playerNumber={player.playerNumber}
@@ -312,7 +334,7 @@ export class PlayArea extends Component {
 				{this.props.players.details.playerCenter ?
 					<div style={{float: 'left'}}>
 						<PlayerContainer
-							cards={this.props.players.details.playerCenter.hand}
+							cards={this.props.players.details.playerCenter.hand.cards}
 							avatar={{}}
 							name={this.props.players.details.playerCenter.name}
 							playerNumber={this.props.players.details.playerCenter.playerNumber}
