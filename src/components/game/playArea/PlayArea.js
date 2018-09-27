@@ -11,7 +11,14 @@ import './PlayArea.css';
 
 import { dealTableCards } from '../../../actions/tableCardActions';
 import { showFlopCards, showTurnCard, showRiverCard } from '../../../actions/tableCardStatusActions';
-import { createPlayers, dealToPlayers, updatePlayerCash, updatePlayerActionStats, resetPlayerCurrentBets } from '../../../actions/playersActions';
+import { 
+	createPlayers,
+	dealToPlayers,
+	updatePlayerCash,
+	updatePlayerActionStats,
+	resetPlayerCurrentBets,
+	addDeterminedHandsToPlayers
+} from '../../../actions/playersActions';
 import { addToPot } from '../../../actions/potActions';
 
 const players = [
@@ -135,14 +142,17 @@ export class PlayArea extends Component {
 					this.setState({
 						gameOver: true
 					});
-					this.determinePlayersHands(this.props.players.details);
+					const allHands = this.determinePlayersHands(this.props.players.details);
+					setTimeout(() => {
+						this.props.addDeterminedHandsToPlayers(this.props.players.details, allHands)
+					}, 3000);
 				}
 			}
 		}
 	}
 
 	determinePlayersHands = players => {
-		console.log(players.map( player => {
+		const allHands = players.map( player => {
 			if(player.inThisHand){
 				const cardPool = {
 					cards: [...this.props.tableCards.flop, ...this.props.tableCards.turn, ...this.props.tableCards.river, ...player.hand.cards]
@@ -150,7 +160,8 @@ export class PlayArea extends Component {
 				return determineHand(cardPool);
 			}
 			else return null;
-		}));
+		});
+		return allHands;
 	}
 
 	goToNextPlayer = (newActivePlayer = this.state.actionOnPlayer + 1) => {
@@ -294,8 +305,9 @@ export class PlayArea extends Component {
 					type={player.type}
 					cash={player.cash}
 					lastAction={player.lastAction}
+					resultingHand={player.finalHand ? player.finalHand.handTitle : null}
 				/>
-				{!this.state.gameOver && this.state.actionOnPlayer === player.playerNumber ?
+				{this.state.playing && !this.state.gameOver && this.state.actionOnPlayer === player.playerNumber ?
 					(<PlayerControlsContainer 
 						playerInfo={player}
 						checkOrCall={checkOrCall}
@@ -367,6 +379,8 @@ PlayArea.propTypes = {
 	showFlopCards: PropTypes.func.isRequired,
 	showTurnCard: PropTypes.func.isRequired,
 	showRiverCard: PropTypes.func.isRequired,
+	addDeterminedHandsToPlayers: PropTypes.func.isRequired,
+
 	tableCardStatus: PropTypes.object,
 	tableCards: PropTypes.object,
 	players: PropTypes.object,
@@ -407,5 +421,6 @@ export default connect(mapStateToProps, {
 	resetPlayerCurrentBets,
 	showFlopCards,
 	showTurnCard,
-	showRiverCard
+	showRiverCard,
+	addDeterminedHandsToPlayers
 })(PlayArea);

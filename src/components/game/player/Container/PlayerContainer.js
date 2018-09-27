@@ -38,7 +38,7 @@ class PlayerContainer extends Component {
 					lastAction={this.props.lastAction}
 				/>
 				<Text
-					content={this.props.name}
+					content={this.props.resultingHand ? this.props.resultingHand : this.props.name}
 					textStyle='h1'
 				/>
 				<Timer
@@ -53,7 +53,12 @@ PlayerContainer.propTypes = {
 	avatar: PropTypes.object.isRequired,
 	name: PropTypes.string.isRequired,
 	playerNumber: PropTypes.number.isRequired,
-	type: PropTypes.string.isRequired
+	type: PropTypes.string.isRequired,
+	resultingHand: PropTypes.string
+};
+
+PlayerContainer.defaultProps = {
+	resultingHand: null
 };
 
 export default PlayerContainer;

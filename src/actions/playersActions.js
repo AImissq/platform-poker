@@ -4,6 +4,7 @@ import {
 	DEAL_CARDS_TO_PLAYER,
 	UPDATE_PLAYER_CASH,
 	UPDATE_PLAYER_ACTION_STATS,
+	ADD_DETERMINED_HANDS_TO_PLAYERS,
 	RESET_PLAYER_CURRENT_BETS
 } from './types';
 
@@ -70,6 +71,20 @@ export const updatePlayerActionStats = (players, whoAmI, action, currentBet) => 
 
 	dispatch({
 		type: UPDATE_PLAYER_ACTION_STATS,
+		payload: {
+			loading: false,
+			details: [...players]
+		}
+	});
+};
+
+export const addDeterminedHandsToPlayers = (players, hands) => dispatch => {
+	for (let i = 0; i < players.length; i++) {
+		players[i].finalHand = hands[i];
+	}
+
+	dispatch({
+		type: ADD_DETERMINED_HANDS_TO_PLAYERS,
 		payload: {
 			loading: false,
 			details: [...players]

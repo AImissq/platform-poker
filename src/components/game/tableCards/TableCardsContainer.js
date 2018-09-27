@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
 import {RiverContainer, TurnContainer, FlopContainer} from './dealtCardsContainer';
 import './TableCardsContainer.css';
 
@@ -34,8 +33,6 @@ export class TableCardsContainer extends Component {
 	}
 
 	render() {
-		const wellStyles = { maxWidth: 400, minWidth: 200, margin: '0 auto 10px', float: 'left' };
-
 		const flopCards = this.props.flopIsVisible ? this.props.tableCards.flop : null;
 		const turnCard = this.props.turnIsVisible ? this.props.tableCards.turn : null;
 		const riverCard = this.props.riverIsVisible ? this.props.tableCards.river : null;

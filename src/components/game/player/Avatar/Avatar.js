@@ -49,9 +49,13 @@ class Avatar extends Component {
 }
 
 Avatar.propTypes = {
+	lastAction: PropTypes.string,
+	cash: PropTypes.number
 };
 
 Avatar.defaultProps = {
+	lastAction: '',
+	cash: 0
 };
 
 const mapStateToProps = state => ({

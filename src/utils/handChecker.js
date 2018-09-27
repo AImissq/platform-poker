@@ -4,8 +4,8 @@
 
 const addAces = require("./aceManipulation").addAces;
 const removeAces = require("./aceManipulation").removeAces;
-const valueSort = require('./cardSorter').valueSort;
-const suitSort = require('./cardSorter').suitSort;
+const valueSort = require("./cardSorter").valueSort;
+const suitSort = require("./cardSorter").suitSort;
 // const hands = require('./mockHands');
 
 // ROYAL FLUSH
@@ -18,7 +18,10 @@ const checkForRoyalFlush = hand => {
         return currentHand;
     };
     // check for Straight Flush
-    if (resultingHand.handRank === 9 && resultingHand.straightCards[0].value === 14) {
+    if (
+        resultingHand.handRank === 9 &&
+        resultingHand.straightCards[0].value === 14
+    ) {
         resultingHand = updateRoyalFlush(resultingHand);
     }
     return resultingHand;
@@ -47,10 +50,15 @@ const checkForStraightFlush = hand => {
             if (resultingHand.straightCards[i].suit !== resultingHand.suit) {
                 for (let j = 0; j < resultingHand.cards.length; j++) {
                     if (
-                        resultingHand.straightCards[i].value === resultingHand.cards[j].value &&
+                        resultingHand.straightCards[i].value ===
+                            resultingHand.cards[j].value &&
                         resultingHand.cards[j].suit === resultingHand.suit
                     ) {
-                        resultingHand.straightCards.splice(i, 1, resultingHand.cards[j]);
+                        resultingHand.straightCards.splice(
+                            i,
+                            1,
+                            resultingHand.cards[j]
+                        );
                     }
                 }
             }
@@ -101,13 +109,20 @@ const checkForFullHouse = hand => {
     // check for PAIR & if card #0 is the same as card #2
     if (
         resultingHand.numPairs > 1 &&
-        ((resultingHand.cardOrder[0].value === resultingHand.cardOrder[2].value &&
-            resultingHand.cardOrder[3].value === resultingHand.cardOrder[4].value) ||
-            (resultingHand.cardOrder[0].value === resultingHand.cardOrder[1].value &&
-                resultingHand.cardOrder[2].value === resultingHand.cardOrder[4].value))
+        ((resultingHand.cardOrder[0].value ===
+            resultingHand.cardOrder[2].value &&
+            resultingHand.cardOrder[3].value ===
+                resultingHand.cardOrder[4].value) ||
+            (resultingHand.cardOrder[0].value ===
+                resultingHand.cardOrder[1].value &&
+                resultingHand.cardOrder[2].value ===
+                    resultingHand.cardOrder[4].value))
     ) {
         resultingHand = updateFullHouse(resultingHand);
-        if (resultingHand.cardOrder[2].value === resultingHand.cardOrder[4].value) {
+        if (
+            resultingHand.cardOrder[2].value ===
+            resultingHand.cardOrder[4].value
+        ) {
             [
                 resultingHand.cardOrder[0],
                 resultingHand.cardOrder[1],
@@ -367,6 +382,30 @@ const checkForPair = hand => {
 
 // HIGH CARD
 // export const checkForHighCard = hand => {
+const setHighCard = hand => {
+    let resultingHand = Object.assign({}, hand);
+
+    // valueSort
+    if (resultingHand.sort !== "valueSort") {
+        resultingHand = valueSort(resultingHand);
+    }
+
+	// add Card Order
+	resultingHand.cardOrder = [];
+
+    // update Card Order
+    for (let i = 0; i < 5; i++) {
+        resultingHand.cardOrder.push(resultingHand.cards[i]);
+    }
+
+    resultingHand.handTitle = "High Card";
+    resultingHand.handRank = 1;
+
+    return resultingHand;
+};
+
+// HIGH CARD
+// export const checkForHighCard = hand => {
 // const checkForHighCard = hand => {
 //     // valueSort
 //     if (hand.sort !== "valueSort") {
@@ -382,6 +421,10 @@ const checkForPair = hand => {
 const determineHand = hand => {
     // Create a new object to keep this function pure
     let resultingHand = Object.assign({}, hand);
+
+    // Initial State: HIGH CARD
+    // This check will set the High Card values
+    resultingHand = setHighCard(resultingHand);
 
     // Check #1: PAIR
     // This check will setup the Pair keys in the hand object for future reference
@@ -450,6 +493,6 @@ module.exports = {
     checkForStraightFlush,
     checkForRoyalFlush,
     determineHand
-}
+};
 
 // console.log(determineHand(initialHand));

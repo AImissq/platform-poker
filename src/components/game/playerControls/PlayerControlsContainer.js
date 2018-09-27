@@ -52,4 +52,16 @@ class PlayerControlsContainer extends Component {
 	}
 }
 
+PlayerControlsContainer.propTypes = {
+	checkOrCall: PropTypes.string,
+	checkAction: PropTypes.func.isRequired,
+	callAction: PropTypes.func.isRequired,
+	raiseAction: PropTypes.func.isRequired,
+	foldAction: PropTypes.func.isRequired
+};
+
+PlayerControlsContainer.defaultProps = {
+	checkOrCall: 'check'
+};
+
 export default PlayerControlsContainer;
