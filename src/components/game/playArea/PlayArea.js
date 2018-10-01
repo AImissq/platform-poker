@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button } from 'react-bootstrap';
 
-import PlayerContainer from '../player/Container/PlayerContainer';
+import PlayerContainer from '../player/containers/PlayerContainer';
 import TableCardsContainer from '../tableCards/TableCardsContainer';
 import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
-import { createDeck, deal, determineHand } from '../../../utils';
 import './PlayArea.css';
 
+import { createDeck, deal, determineHand } from '../../../utils';
 import { dealTableCards } from '../../../actions/tableCardActions';
 import { showFlopCards, showTurnCard, showRiverCard } from '../../../actions/tableCardStatusActions';
 import { 
@@ -35,10 +35,11 @@ const players = [
 		whichPlayerAmI: 'playerTopRight',
 		currentSingleBet: 0,
 		currentRoundOfBetting: 0,
-		currentBet: 0
+		currentBet: 0,
+		avatar: 'avatar1.png'
 	},
 	{
-		name: 'Kacy',
+		name: 'Ben',
 		playerNumber: 1,
 		type: 'npc',
 		hand: {
@@ -50,10 +51,11 @@ const players = [
 		whichPlayerAmI: 'playerTopLeft',
 		currentSingleBet: 0,
 		currentRoundOfBetting: 0,
-		currentBet: 0
+		currentBet: 0,
+		avatar: 'avatar2.png'
 	},
 	{
-		name: 'Ben',
+		name: 'Kacy',
 		playerNumber: 2,
 		type: 'npc',
 		hand: {
@@ -65,7 +67,8 @@ const players = [
 		whichPlayerAmI: 'playerCenter',
 		currentSingleBet: 0,
 		currentRoundOfBetting: 0,
-		currentBet: 0
+		currentBet: 0,
+		avatar: 'avatar3.png'
 	}
 ];
 
@@ -297,16 +300,7 @@ export class PlayArea extends Component {
 
 		const opponentDivs = this.props.players.details.map(player => {
 			return (<div style={{float: 'left'}} className='hello' key={player.playerNumber}>
-				<PlayerContainer
-					cards={player.inThisHand ? player.hand.cards : null}
-					avatar={{}}
-					name={player.name}
-					playerNumber={player.playerNumber}
-					type={player.type}
-					cash={player.cash}
-					lastAction={player.lastAction}
-					resultingHand={player.finalHand ? player.finalHand.handTitle : null}
-				/>
+				<PlayerContainer player={player} />
 				{this.state.playing && !this.state.gameOver && this.state.actionOnPlayer === player.playerNumber ?
 					(<PlayerControlsContainer 
 						playerInfo={player}
@@ -324,7 +318,7 @@ export class PlayArea extends Component {
 
 	render() {
 		return (
-			<div>
+			<div className='play-area'>
 				{this.drawOpponentDivs()}
 
 				<div style={{fontSize: '2em', width: '800px', margin: '0 auto', marginBottom: '20px'}}>
@@ -343,26 +337,6 @@ export class PlayArea extends Component {
 					: <div style={{width: '60%', margin: '0 auto', display: 'table'}}><Button bsStyle='primary' bsSize='large' block onClick={() => this.dealCardsToPlayers(deck)}>Start Game</Button></div>
 				}
 
-				{this.props.players.details.playerCenter ?
-					<div style={{float: 'left'}}>
-						<PlayerContainer
-							cards={this.props.players.details.playerCenter.hand.cards}
-							avatar={{}}
-							name={this.props.players.details.playerCenter.name}
-							playerNumber={this.props.players.details.playerCenter.playerNumber}
-							type={this.props.players.details.playerCenter.type}
-							cash={this.props.players.details.playerCenter.cash}
-						/>
-						<PlayerControlsContainer 
-							playerInfo={this.props.players.details.playerCenter}
-							checkAction = {this.playerChecks}
-							callAction = {this.playerCalls}
-							raiseAction = {this.playerRaises}
-						/>
-					</div>
-					: null
-				}
-				
 			</div>
 		);
 	}

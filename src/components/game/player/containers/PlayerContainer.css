@@ -1,0 +1,115 @@
+.player-container {
+    width: 350px;
+    height: 185px;
+    margin: 50px 0 50px 50px;
+    float: left;
+}
+
+.left-third {
+    box-sizing: border-box;
+    width: 25%;
+    float: left;
+}
+
+.center-third {
+    box-sizing: border-box;
+    width: 35%;
+    float: left;
+}
+
+.right-third {
+    box-sizing: border-box;
+    width: 40%;
+    float: left;
+}
+
+.footer {
+    box-sizing: border-box;
+    width: 100%;
+    float: left;
+}
+
+.inner {
+    box-sizing: border-box;
+    margin: 0 0 5px 0;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+}
+
+.center-inner {
+    margin: 0 5px 5px 5px;
+}
+
+.one {
+    height: 35px;
+}
+
+.two {
+    height: 80px;
+}
+
+.three {
+    height: 120px;
+}
+
+.half {
+    height: 20px;
+    margin-bottom: 0px;
+}
+
+.image-chipstack {
+    height: 30px;
+    margin: 0 5px;
+    float: left;
+}
+
+.image-stopwatch {
+    height: 25px;
+    width: 18px;
+    margin: 5px;
+    float: left;
+}
+
+.playerContainerTitle {
+    padding: 2px;
+    margin: 0;
+    font-size: 0.6em;
+    text-align: center;
+}
+
+.playerContainerText {
+    margin: 0;
+    font-size: 1.2em;
+}
+
+.playerContainerRank {
+    float: left;
+    font-size: 1.75em;
+    font-weight: bolder;
+    margin: 0 0 0 5px;
+
+}
+
+.playerContainerName {
+    float: right;
+    font-size: 1em;
+    margin: 8px 10px 0 0;
+}
+
+.playerContainerCash {
+    padding-top: 8px;
+    font-size: 1em;
+    float: left;
+}
+
+.playerContainerTimerText {
+    font-size: .85em;
+    text-align: center;
+    margin: 0;
+}
+
+.avatar-image {
+    height: 120px;
+    width: 112.5px;
+    border-radius: 2px;
+}

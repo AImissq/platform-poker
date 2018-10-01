@@ -1,0 +1,29 @@
+.card-demo {
+    box-sizing: border-box;
+    border-radius: 10px 0 0 0;
+    border: 1px solid #666666;
+    border-right: 0px;
+    border-bottom: 0px;
+    background-color: #ffffff;
+    flex: 1 1 auto;
+}
+
+.card-text {
+    font-size: 3em;
+    font-weight: bolder;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.red {
+    color: #ff0000;
+}
+
+.black {
+    color: #000000;
+}
+
+.suit-image {
+    max-width: 50px;
+    max-height: 40px;
+}

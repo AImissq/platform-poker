@@ -15,7 +15,7 @@ class Avatar extends Component {
 	}
 
 	addCommasToCash = cash => {
-		let cashAsString = this.props.cash.toString();
+		let cashAsString = cash.toString();
 		let cashArray = [];
 		for (let i = cashAsString.length; i > 0; i = i - 3) {
 			if(i === cashAsString.length) {
@@ -31,7 +31,7 @@ class Avatar extends Component {
 	render() {
 		return (
 		<div className='avatar' id=''>
-			<img src='http://tilomitra.com/wp-content/uploads/2014/08/avatar-cartoon.png' width='150px' alt='Avatar' />
+			<img src={`images/${this.props.features}`} width='150px' alt='Avatar' />
 			<Rank
 				rank={this.state.rank}
 			/>
