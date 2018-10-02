@@ -26,9 +26,9 @@ export class PlayerContainer extends Component {
 						<CardsContainer cards={this.props.player.hand.cards} />
 					</div>
 					<div className='inner one'>
-						<img className='image-stopwatch' src='images/stopwatch.jpg' />
-						<img className='image-stopwatch' src='images/stopwatch.jpg' />
-						<img className='image-stopwatch' src='images/stopwatch.jpg' />
+						<img className='image-stopwatch' src='images/stopwatch.jpg' alt='Add 30 seconds' />
+						<img className='image-stopwatch' src='images/stopwatch.jpg' alt='Add 30 seconds' />
+						<img className='image-stopwatch' src='images/stopwatch.jpg' alt='Add 30 seconds' />
 					</div>
 				</div>
 				<div className="center-third">
@@ -52,7 +52,7 @@ export class PlayerContainer extends Component {
 						<p className='playerContainerText'>{this.props.player.lastAction}</p>
 					</div>
 					<div className='inner one'>
-						<img className='image-chipstack' src='images/chipStack.jpg' />
+						<img className='image-chipstack' src='images/chipStack.jpg' alt={this.addCommasToCash(this.props.player.cash)} />
 						<p className='playerContainerCash'>{this.addCommasToCash(this.props.player.cash)}</p>
 					</div>
 				</div>

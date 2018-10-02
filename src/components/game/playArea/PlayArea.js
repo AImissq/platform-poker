@@ -17,6 +17,7 @@ import {
 	updatePlayerCash,
 	updatePlayerActionStats,
 	resetPlayerCurrentBets,
+	awardPotToPlayer,
 	addDeterminedHandsToPlayers
 } from '../../../actions/playersActions';
 import { addToPot } from '../../../actions/potActions';
@@ -281,29 +282,79 @@ export class PlayArea extends Component {
 		}
 	}
 
-	determineWinner = () => {
+	determineWinner = async () => {
 		let winners = [];
+		let theBigLoopIsDone;
 
 		for (let i = 0; i < this.props.players.details.length; i++) {
 			if (this.props.players.details[i].inThisHand && (winners.length < 1 || this.props.players.details[i].finalHand.handRank > winners[0].winningHandRank)) {
 				winners = [{
 					playerNumber: i,
+					playerName: this.props.players.details[i].name,
 					winningHandRank: this.props.players.details[i].finalHand.handRank,
 					winningCards: [...this.props.players.details[i].finalHand.cardOrder]
 				}];
+
+				if(i === this.props.players.details.length -1) {
+					theBigLoopIsDone = true;
+				}
 			}
 			else if (this.props.players.details[i].inThisHand && this.props.players.details[i].finalHand.handRank === winners[0].winningHandRank) {
-				winners.push({
-					playerNumber: i,
-					winningHandRank: this.props.players.details[i].finalHand.handRank,
-					winningCards: [...this.props.players.details[i].finalHand.cardOrder]
-				});
+				let tie = true;
+				let thisLoopIsDone;
+
+				for (let j = 0; j < 5; j++) {
+					if(this.props.players.details[i].finalHand.cardOrder[j].value > winners[0].winningCards[j].value) {
+						winners = [{
+							playerNumber: i,
+							playerName: this.props.players.details[i].name,
+							winningHandRank: this.props.players.details[i].finalHand.handRank,
+							winningCards: [...this.props.players.details[i].finalHand.cardOrder]
+						}];
+						tie = false;
+						j = 5;
+						thisLoopIsDone = true;
+					}
+					else if(this.props.players.details[i].finalHand.cardOrder[j].value < winners[0].winningCards[j].value) {
+						tie = false;
+						j = 5;
+						thisLoopIsDone = true;
+					}
+
+					if (j === 4) {
+						thisLoopIsDone = true;
+					}
+				}
+
+				if(await thisLoopIsDone && tie) {
+					winners.push({
+						playerNumber: i,
+						playerName: this.props.players.details[i].name,
+						winningHandRank: this.props.players.details[i].finalHand.handRank,
+						winningCards: [...this.props.players.details[i].finalHand.cardOrder]
+					});
+				}
+
+				if(await thisLoopIsDone && i === this.props.players.details.length -1) {
+					theBigLoopIsDone = true;
+				}
+			}
+			else {
+				if(i === this.props.players.details.length -1) {
+					theBigLoopIsDone = true;
+				}
 			}
 		}
 
-		this.setState({
-			winners
-		});
+		if(await theBigLoopIsDone) {
+			// players, winners, pot
+			this.props.awardPotToPlayer(this.props.players.details, winners, this.props.pot.details[0].total);
+
+			this.setState({
+				winners
+			});
+		}
+
 	}
 
 	resetPlayers = () => {
@@ -345,7 +396,18 @@ export class PlayArea extends Component {
 		return opponentDivs;
 	}
 
+	displayWinners = () => {
+		let keyword = 'wins';
+		if(this.state.winners.length > 1) {
+			keyword = 'ties';
+		}
+		return this.state.winners.map(winner => (
+			<p key={winner.playerNumber}>{this.props.players.details[winner.playerNumber].name} {keyword} with a {this.props.players.details[winner.playerNumber].finalHand.handTitle}!</p>
+		));
+	}
+
 	render() {
+
 		return (
 			<div className='play-area'>
 				{this.drawOpponentDivs()}
@@ -356,7 +418,7 @@ export class PlayArea extends Component {
 						? <span> | Action is on <strong>{this.props.players.details[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
 						: null
 					}
-					{this.state.winners ? <p>{this.props.players.details[this.state.winners[0].playerNumber].name} wins with a {this.props.players.details[this.state.winners[0].playerNumber].finalHand.handTitle}!</p> : null}
+					{this.state.winners ? this.displayWinners() : null}
 				</div>
 
 				{ this.state.playing ? <TableCardsContainer
@@ -379,6 +441,7 @@ PlayArea.propTypes = {
 	addToPot: PropTypes.func.isRequired,
 	updatePlayerCash: PropTypes.func.isRequired,
 	updatePlayerActionStats: PropTypes.func.isRequired,
+	awardPotToPlayer: PropTypes.func.isRequired,
 	resetPlayerCurrentBets: PropTypes.func.isRequired,
 	showFlopCards: PropTypes.func.isRequired,
 	showTurnCard: PropTypes.func.isRequired,
@@ -422,6 +485,7 @@ export default connect(mapStateToProps, {
 	addToPot,
 	updatePlayerCash,
 	updatePlayerActionStats,
+	awardPotToPlayer,
 	resetPlayerCurrentBets,
 	showFlopCards,
 	showTurnCard,

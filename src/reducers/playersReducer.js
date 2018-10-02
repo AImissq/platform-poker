@@ -5,6 +5,7 @@ import {
 	UPDATE_PLAYER_CASH,
 	UPDATE_PLAYER_ACTION_STATS,
 	ADD_DETERMINED_HANDS_TO_PLAYERS,
+	AWARD_POT_TO_PLAYER,
 	RESET_PLAYER_CURRENT_BETS
 } from '../actions/types';
 
@@ -26,6 +27,8 @@ export default function(state = initialState, action) {
 	case UPDATE_PLAYER_ACTION_STATS:
 		return {...action.payload};
 	case ADD_DETERMINED_HANDS_TO_PLAYERS:
+		return {...action.payload};
+	case AWARD_POT_TO_PLAYER:
 		return {...action.payload};
 	case RESET_PLAYER_CURRENT_BETS:
 		return {...action.payload};
