@@ -43,9 +43,9 @@ export class PlayerContainer extends Component {
 				<div className="right-third">
 					<div className='inner two'>
 						<p className='playerContainerTitle'>Your Hand</p>
-						<p className='playerContainerText'>{this.props.player.finalHand ? this.props.player.finalHand.handTitle : 'In Progress'}</p>
-						<p className='playerContainerTitle'>Outs</p>
-						<p className='playerContainerText'>4</p>
+						{!this.props.player.finalHand ? <p className='playerContainerText'>In Progress</p> : <p className='playerContainerText'>{this.props.player.finalHand.handTitle}</p>}
+						{!this.props.player.finalHand && this.props.player.inThisHand ? <p className='playerContainerTitle'>Outs</p> : null}
+						{!this.props.player.finalHand && this.props.player.inThisHand ? <p className='playerContainerText'>4</p> : null}
 					</div>
 					<div className='inner one'>
 						<p className='playerContainerTitle'>Last Action</p>

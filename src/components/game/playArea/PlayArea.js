@@ -86,6 +86,7 @@ export class PlayArea extends Component {
 			currentBet: 0,
 			actionOnPlayer: 0,
 			gameOver: false,
+			calculationsComplete: false,
 			results: [
 				{
 					name: players[0].name,
@@ -149,6 +150,9 @@ export class PlayArea extends Component {
 					setTimeout(() => {
 						this.props.addDeterminedHandsToPlayers(this.props.players.details, allHands)
 					}, 3000);
+					setTimeout(() => {
+						this.determineWinner();
+					}, 4000);
 				}
 			}
 		}
@@ -277,6 +281,31 @@ export class PlayArea extends Component {
 		}
 	}
 
+	determineWinner = () => {
+		let winners = [];
+
+		for (let i = 0; i < this.props.players.details.length; i++) {
+			if (this.props.players.details[i].inThisHand && (winners.length < 1 || this.props.players.details[i].finalHand.handRank > winners[0].winningHandRank)) {
+				winners = [{
+					playerNumber: i,
+					winningHandRank: this.props.players.details[i].finalHand.handRank,
+					winningCards: [...this.props.players.details[i].finalHand.cardOrder]
+				}];
+			}
+			else if (this.props.players.details[i].inThisHand && this.props.players.details[i].finalHand.handRank === winners[0].winningHandRank) {
+				winners.push({
+					playerNumber: i,
+					winningHandRank: this.props.players.details[i].finalHand.handRank,
+					winningCards: [...this.props.players.details[i].finalHand.cardOrder]
+				});
+			}
+		}
+
+		this.setState({
+			winners
+		});
+	}
+
 	resetPlayers = () => {
 		this.setState({
 			actionOnPlayer: 0,
@@ -327,6 +356,7 @@ export class PlayArea extends Component {
 						? <span> | Action is on <strong>{this.props.players.details[this.state.actionOnPlayer].name}</strong> (player <strong>{this.state.actionOnPlayer}</strong>)</span>
 						: null
 					}
+					{this.state.winners ? <p>{this.props.players.details[this.state.winners[0].playerNumber].name} wins with a {this.props.players.details[this.state.winners[0].playerNumber].finalHand.handTitle}!</p> : null}
 				</div>
 
 				{ this.state.playing ? <TableCardsContainer
