@@ -6,7 +6,8 @@ import {
 	UPDATE_PLAYER_ACTION_STATS,
 	ADD_DETERMINED_HANDS_TO_PLAYERS,
 	AWARD_POT_TO_PLAYER,
-	RESET_PLAYER_CURRENT_BETS
+	RESET_PLAYER_CURRENT_BETS,
+	RESET_PLAYERS_FOR_NEW_HAND
 } from '../actions/types';
 
 const initialState = {
@@ -17,6 +18,8 @@ const initialState = {
 export default function(state = initialState, action) {
 	switch(action.type) {
 	case RESET_PLAYERS_TO_DEFAULT:
+		return {...action.payload};
+	case RESET_PLAYERS_FOR_NEW_HAND:
 		return {...action.payload};
 	case CREATE_PLAYERS:
 		return {...action.payload};

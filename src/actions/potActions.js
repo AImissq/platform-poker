@@ -5,7 +5,12 @@ export const resetPotToDefault = () => dispatch => {
 		type: RESET_POT_TO_DEFAULT,
 		payload: {
 			loading: false,
-			details: []
+			details: [{
+				total: 0,
+				players: [],
+				playerCanCheck: false,
+				full: false
+			}]
 		}
 	});
 };

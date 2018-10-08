@@ -6,7 +6,8 @@ import {
 	UPDATE_PLAYER_ACTION_STATS,
 	ADD_DETERMINED_HANDS_TO_PLAYERS,
 	AWARD_POT_TO_PLAYER,
-	RESET_PLAYER_CURRENT_BETS
+	RESET_PLAYER_CURRENT_BETS,
+	RESET_PLAYERS_FOR_NEW_HAND
 } from './types';
 
 export const resetPlayersToDefault = () => dispatch => {
@@ -15,6 +16,28 @@ export const resetPlayersToDefault = () => dispatch => {
 		payload: {
 			loading: false,
 			details: []
+		}
+	});
+};
+
+export const resetPlayersForNewHand = players => dispatch => {
+	players.map(player => (
+		player = {
+			...player,
+			hand: {
+				cards: []
+			},
+			lastAction: '',
+			inThisHand: true,
+			currentBet: 0,
+			finalHand: null
+		}
+	));
+	dispatch({
+		type: RESET_PLAYERS_FOR_NEW_HAND,
+		payload: {
+			loading: false,
+			details: [...players]
 		}
 	});
 };

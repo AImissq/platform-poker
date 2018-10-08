@@ -9,8 +9,8 @@ import PlayerControlsContainer from '../playerControls/PlayerControlsContainer';
 import './PlayArea.css';
 
 import { createDeck, deal, determineHand } from '../../../utils';
-import { dealTableCards } from '../../../actions/tableCardActions';
-import { showFlopCards, showTurnCard, showRiverCard } from '../../../actions/tableCardStatusActions';
+import { dealTableCards, resetTableCardsToDefault } from '../../../actions/tableCardActions';
+import { showFlopCards, showTurnCard, showRiverCard, resetTableCardStatusToDefault } from '../../../actions/tableCardStatusActions';
 import { 
 	createPlayers,
 	dealToPlayers,
@@ -18,9 +18,10 @@ import {
 	updatePlayerActionStats,
 	resetPlayerCurrentBets,
 	awardPotToPlayer,
-	addDeterminedHandsToPlayers
+	addDeterminedHandsToPlayers,
+	resetPlayersForNewHand
 } from '../../../actions/playersActions';
-import { addToPot } from '../../../actions/potActions';
+import { addToPot, resetPotToDefault } from '../../../actions/potActions';
 
 const players = [
 	{
@@ -75,33 +76,38 @@ const players = [
 
 let deck;
 
+const newHandState = {
+	deck: [],
+	currentBet: 0,
+	actionOnPlayer: 0,
+	gameOver: false,
+	calculationsComplete: false,
+	results: [
+		{
+			name: players[0].name,
+			results: null
+		},
+		{
+			name: players[1].name,
+			results: null
+		},
+		{
+			name: players[2].name,
+			results: null
+		}
+	],
+	winners: null
+}
+
 export class PlayArea extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			deck: [],
-			playing: false,
 			smallBlind: 10,
 			bigBlind: 20,
 			minRaise: 20,
-			currentBet: 0,
-			actionOnPlayer: 0,
-			gameOver: false,
-			calculationsComplete: false,
-			results: [
-				{
-					name: players[0].name,
-					results: null
-				},
-				{
-					name: players[1].name,
-					results: null
-				},
-				{
-					name: players[2].name,
-					results: null
-				}
-			]
+			playing: false,
+			...newHandState
 		};
 	}
 
@@ -406,6 +412,24 @@ export class PlayArea extends Component {
 		));
 	}
 
+	// beginNewHand = () => {
+	// 	this.props.resetTableCardsToDefault(),
+	// 	this.props.resetPlayersForNewHand(this.props.players.details);
+	// 	this.dealCardsToPlayers(deck);
+	// 	this.props.resetPotToDefault();
+	// 	this.props.resetTableCardStatusToDefault();
+		
+	// 	deck = createDeck();
+	// 	this.props.dealTableCards(deck);
+	// 	this.props.createPlayers(players);
+	// 	this.setState({
+	// 		...this.state,
+	// 		deck,
+	// 		...newHandState,
+	// 	});
+		
+	// }
+
 	render() {
 
 		return (
@@ -419,6 +443,7 @@ export class PlayArea extends Component {
 						: null
 					}
 					{this.state.winners ? this.displayWinners() : null}
+					{/* this.state.winners ? <Button bsStyle='primary' bsSize='large' block onClick={this.beginNewHand}>Next Hand</Button> : null */}
 				</div>
 
 				{ this.state.playing ? <TableCardsContainer
@@ -447,6 +472,7 @@ PlayArea.propTypes = {
 	showTurnCard: PropTypes.func.isRequired,
 	showRiverCard: PropTypes.func.isRequired,
 	addDeterminedHandsToPlayers: PropTypes.func.isRequired,
+	resetTableCardStatusToDefault: PropTypes.func.isRequired,
 
 	tableCardStatus: PropTypes.object,
 	tableCards: PropTypes.object,
@@ -490,5 +516,9 @@ export default connect(mapStateToProps, {
 	showFlopCards,
 	showTurnCard,
 	showRiverCard,
-	addDeterminedHandsToPlayers
+	addDeterminedHandsToPlayers,
+	resetTableCardStatusToDefault,
+	resetTableCardsToDefault,
+	resetPotToDefault,
+	resetPlayersForNewHand
 })(PlayArea);
